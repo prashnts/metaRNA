@@ -23,7 +23,7 @@ autoscan.log
 autoscan-*.log
 aclocal.m4
 compile
-config.h.in
+config.*
 configure
 configure.scan
 depcomp
@@ -32,3 +32,9 @@ missing
 stamp-h1
 config.guess
 config.sub
+libtool
+py-compile
+.libs
+*.la
+*.lo
+ltmain.sh

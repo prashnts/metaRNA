@@ -48,3 +48,13 @@ noinst_HEADERS = miranda.h
 LDADD = -L/usr/local/lib -lRNA -lm
 
 INCLUDES = -I/usr/local/include/ViennaRNA
+
+libpymirandadir = $(pkgpythondir)
+
+pyexec_LTLIBRARIES = libpymiranda.la
+libpymiranda_la_LDFLAGS = -module -avoid-version -export-symbols-regex PyInit_libpymiranda
+libpymiranda_la_CFLAGS = $(PYTHON_CFLAGS)
+libpymiranda_la_LIBADD = $(PYTHON_LIBS)
+libpymiranda_la_SOURCES = pymiranda.c
+
+EXTRA_DIST = libpymiranda.h

@@ -52,6 +52,15 @@ AC_SUBST(ISODATE)
 AM_INIT_AUTOMAKE
 AC_CANONICAL_HOST
 
+LT_INIT
+AC_PROG_CXX
+
+AM_PATH_PYTHON(3.5.0)
+PYTHON_LIBS=`python3-config --ldflags`
+PYTHON_CFLAGS=`python3-config --cflag`
+AC_SUBST([PYTHON_LIBS])
+AC_SUBST([PYTHON_CFLAGS])
+
 # Checks for programs.
 AC_PROG_CC
 if test "$GCC" = yes; then
