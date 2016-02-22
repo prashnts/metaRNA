@@ -1,0 +1,153 @@
+=============================================================================
+Notes on miRanda-3.3a code (aug2010)
+
+- generation of postscript diagram file during energy folding was
+inhibited
+
+- un-necessary files pruned from distribution, including over 20 files
+from RNAlib.
+
+- autoconf/automake configuration refreshed using recent version of
+autoconf
+
+- new code module added: "ExpString", an expanding string object. This
+was added to allow sequences of arbitrary length to be imported from
+input files efficiently. As strings are read from input files, the
+memory object allocates new space as needed to hold the complete
+sequence. Hard limits on sequence length are avoided. This also helps
+avoid overflow in the construction of the list of matched positions in
+scan.c. There is no more compiled limit on sequence length or
+sequence identifier length. (#define SEQUENCE_LENGTH 100000)
+
+- the scmatrix of scores of base pairings was unified, since matricies
+were identical and redundant. Now Matches, Mismatches, Wobbles, and
+Undefined base alignments are scalar values in swat.c and scoring
+matricies are constructed from them. (see initialize_scores())
+
+- code for doing extreme value statistics, shuffling, and reporting
+z-scores. Note: two fields (z-score and p-value) were dropped from the
+miRanda output of hit records.
+
+- email addresses in headers updated
+
+- drop inline specifiers in RNAlib/fold.c to reduce compiling issues
+under some OS's.
+
+- examples directory sequences were corrected and updated
+
+- man page updated to reflect current command line options and
+defaults
+
+- reduced usage of global variables, modularized construction /
+destruction. pruned unused variables and functions. varible names
+improved where helpful.
+
+- when reading sequences, nucleotides are now checked for valid fasta
+character codes and format. Un-recognized characters cause format
+errors. Indeterminate nucleotide base codes [NRYKMSWBDHVX] are all
+equivalent in the internal representation. Additional checks added to
+ensure proper FASTA file formatted sequences, including blank line
+toleration.
+
+- defaults for command-line arguments changed. -sc 140, -go -9,
+-ge -4, -en 1.0 (note: positive energy threshold means *no* energy
+filtering) Validity checks added on command line arguments.
+
+- utr truncation and microRNA/UTR pair specification file
+functionality corrected and tested.
+
+- dropped non-functional "REVERSE" sense target site reporting. All
+target predictions are "FORWARD".
+
+- struct final_score type was used for only a single member,
+positional, a fixed length character string. This was converted to an
+ExpString and moved out of the struct, which was dropped.
+
+- function prototypes consolidated into miranda.h, and reduced to
+those with external callers. Also organized by location.
+
+- corrected "off by one" error in list of predicted target site
+offsets in final summary of all hits between a microRNA and a UTR.
+(In the ">>" lines in miRanda output)
+
+- test_for_overlap() function now requires an overlap in the seed
+region (rather than anywhere in the alignment) in order to suppress
+alternate traceback paths for the same microRNA aligned in the same
+position of the reference sequence. Also, sort order made
+deterministic by adding secondary key: reference end position.
+
+- gaps adjacent to the seed position were not previously handled
+properly for the "-strict" command line option. This version now
+never allows unpaired bases (bulges) of the microRNA in offset 2-8.
+Additionally, unpaired bases in the reference utr sequence which fall
+adjacent to the seed now do not cause rejection under the "-strict"
+command line argument.
+
+- alignment traces which begin at offset 1 with an unaligned base will
+never be better than the same alignment which excludes that base from
+the aligned region (assuming negative gap scores). These are prevented
+from being output (which was possible due to overlap filtering).
+
+- printhit_kshv() and printhit() unified. An argument determines if
+hits are reported with full formatting or as key-value list. (supports
+"-keyval" command line option)
+
+=============================================================================
+Notes on miRanda-3.2a code (sept2008)
+
+- alignment threshold (-sc) now indicates the minimal passing alignment score, rather thant he maximal failing score.
+
+- microRNA (length = n) offset positions 1, n-1, and n are now always scored with zero contribution to the alignment score
+
+=============================================================================
+Notes on miRanda-3.1a code (jan2008)
+
+- offsets for alignments are given as offsets relative to the 5' end of either the microRNA or the UTR.
+
+- scoring of g:u wobbles set to "1". Inside seed, it is scaled by the seed scaling factor
+
+- A:U matches and G:C matches are both scored equally as "5"
+--------------------------------------------------------------------------------
+Notes on miRanda-3.0 code
+
+- The seed region match when running miRanda in strict mode were extended to 2-8.
+Also, changes were made to the scan.c that checks for seed matches.
+
+- Reported hits output the position of the target site on the miRNA (query) and mRNA(ref). The coordinates for
+miRNA are in reference to the 3' end. For example:
+
+  Forward:     Score: 176.000000  Q:3 to 22  R:4502 to 4530 Align Len (27) (70.37%) (74.07%)
+
+   Query:    3' ucUCGAUGUC--ACG-----AAGUAGAGU 5'
+                  ||:|||||  |||     |||||||||
+   Ref:      5' taAGTTACAGTTTGCACAAGTTCATCTCA 3'
+
+   Energy:  -23.830000 kCal/Mol
+
+Scores for this hit:
+>hsa-miR-143__c gi|34485724|ref|NM_033360.2|    176.00  -23.83  0.00    0.000000e+00    3 23    4502 4530       27      70.37%  74.07%
+
+Note that "Q:3 to 22" means that the alignment actually end 3 nt from the miRNA 3'end.
+This should be "Q:1 to 20" - correct either in miRanda code or in parsing. 
+
+- Results from (Genes&Dev, 2004:504-511) and (Nature Biotech, 2005,23,1440) suggests G:U wobbles
+ in seed regions interferes with miRNA activity. In accordance, the match5p matrix was modified such that 
+ G:U pairs are scored as mismatches.
+ 
+- Changed G:U wobble weights in match matrix (scmatrix.h) from 2 to 0. Reduce the influance of G:U wobble on the alignments 
+
+- miRanda does not report back a single max alignment but all alignments that pass the score threshold value.
+
+- Changed match weights of A:U to 4 and kept G:C as 5. 
+
+- Ran miranda mouse predictions with the following flags "-go -4.0 -ge -9.0 -en -16.0 -strict"
+
+- The reported percent identity and percent similarity are related to the aligned region and not the entire length of the seq
+ From example:
+   Forward:     Score: 154.000000  Q:2 to 13  R:1 to 13 Align Len (11) (90.91%) (100.00%)
+
+   Query:    3' uugauauguuGGAUGAUGGAGu 5'
+                          |||:|||||||
+   Ref:      5' ---------cCCTGCTACCTCc 3'
+  
+--------------------------------------------------------------------------------

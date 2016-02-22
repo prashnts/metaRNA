@@ -1,0 +1,7 @@
+NEWS:
+08/23/2010	Release of v3.3a
+03/26/2010	Release of v3.2. Many bugs fixed. Unused functionality
+		removed. Some logic changes, such as zero scoring
+		alignment position 1, n-1, n (query offsets).
+06/01/2004	Fixed a segfault bug that presents itself on compaq unix
+29/11/2003	MiRanda v1.0 Release Finalised, more news to follow

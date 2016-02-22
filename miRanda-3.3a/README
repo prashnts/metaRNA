@@ -1,0 +1,42 @@
+miRanda: An miRNA target scanner that aims to predict mRNA targets
+	 for microRNAs using dynamic-programming alignment and thermodynamics
+
+Authors: Anton Enright, Bino John, Chris Sander and Debora Marks
+(mirnatargets (at) cbio.mskcc.org - to all authors)
+
+Software written by: Anton Enright
+
+Copyright (C) (2003) Memorial Sloan-Kettering Cancer Center
+
+If you use this program in your research then please cite:
+Enright AJ, John B, Gaul U, Tuschl T, Sander C and Marks DS;
+(2003) Genome Biology; 5(1):R1.
+
+Distributed under GNU Public License (GPL) see the files COPYING 
+and LICENSE for details.
+-------------------------------------------------------------------------------
+Simple installation instructions are contained in the file INSTALL.
+
+To Compile do:
+./configure --prefix=/place/to/install
+
+then:
+make install
+
+This will place the miranda binary in:
+/place/to/install/bin/miranda
+
+For information on how to use miranda type:
+miranda --help
+Documentation is contained in the 'man' subdirectory.
+Some Example files are contained in the 'examples' subdirectory
+-------------------------------------------------------------------------------
+Additional software for post-processing miRanda output and cross-species
+conservation analysis may be made available upon request.
+
+This software will be further developed under the open source model,
+coordinated by Anton Enright and Chris Sander (miranda (at) cbio.mskcc.org).
+
+Please send bug reports to: miranda (at) cbio.mskcc.org
+
+The miranda website is at: http://www.microrna.org/

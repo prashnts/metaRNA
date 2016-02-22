@@ -1,0 +1,202 @@
+<HTML><HEAD><TITLE>Manpage of miranda</TITLE>
+</HEAD><BODY>
+<H2>NAME</H2>
+
+miranda - Finds potential target sites for miRNAs in genomic sequence
+<H2>SYNOPSIS</H2>
+
+Basic Usage:
+<BR>
+
+<B>miranda</B> <I>file1</I> <I>file2</I> [ <I>options</I> ... ]
+<P>
+<P>
+Advanced:
+<BR>
+
+<B>miranda</B> <I>file1</I> <I>file2</I> [-sc&nbsp;<I>score</I>] [-en&nbsp;<I>energy</I>] [-scale&nbsp;<I>scale</I>] [-strict] [-go&nbsp;<I>X</I>] [-ge&nbsp;<I>Y</I>] [-out&nbsp;<I>fileout</I>] [-quiet] [-trim&nbsp;<I>T</I>] [-noenergy] [-restrict <I>file</I>]
+<P>
+<H2>DESCRIPTION</H2>
+
+<I></I><B>miRanda</B>
+
+is an algorithm for the detection of potential microRNA target
+sites in genomic sequences. <B>miRanda</B>
+reads RNA sequences (such as microRNAs) from <B>file1</B> and genomic
+DNA/RNA sequences from <B>file2</B>. Both of these files should be in
+FASTA format. This is an example of a FASTA formatted sequence:
+<P>
+<PRE>
+&gt;gi|29565487|emb|AJ550546.1| Drosophila melanogaster microRNA miR-bantam
+GTGAGATCATTTTGAAAGCTG
+</PRE>
+<P>
+
+One or more miRNA sequences from <B>file1</B> are scanned
+against all sequences in <B>file2</B> and potential target sites are
+reported. Potential target sites are identified using a two-step strategy.
+First a dynamic programming local alignment is carried out between the 
+query miRNA sequence and the reference sequence. This alignment procedure
+scores based on sequence complementarity and not on sequence identity.
+In other words we look for A:U and G:C matches instead of A:A, G:G, etc.
+The G:U wobble bair is also permitted, but generally scores less than
+the more optimal matches. Here is an example alignment:
+<P>
+
+<PRE>
+&nbsp;&nbsp;&nbsp;<B>Query:</B>&nbsp;&nbsp;&nbsp;&nbsp;3'&nbsp;gtCGAAAGTTTTACTAGAGTg&nbsp;5'&nbsp;(eg.&nbsp;miRNA)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>|:|||||&nbsp;|||||||||:&nbsp;</B>
+&nbsp;&nbsp;&nbsp;<B>Ref:</B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5'&nbsp;taGTTTTCACAATGATCTCGg&nbsp;3'&nbsp;(eg.&nbsp;3'UTR)
+</PRE>
+<P>
+
+The second phase of the algorithm takes high-scoring alignments
+(Those above a score threshold, defined by <B>-sc</B>)
+detected from phase 1 and estimates the thermodynamic stability
+of RNA duplexes based on these alignments.
+This second phase of the method utilizes folding routines from
+the <B>RNAlib</B> library, which is part of the <B>ViennaRNA</B> package written
+by Ivo Hofacker. At this stage we generate a constrained fictional
+single-stranded RNA composed of the query sequence, a linker
+and the reference sequence (reversed). This structure then folded
+using <B>RNAlib</B> and the minimum free energy (DG kcal/mol) is
+calculated for that structure.
+<P>
+
+Finally, detected targets with energies less than an energy threshold 
+(defined by <B>-en</B>) are selected as potential target sites. Target
+site alignments passing both thresholds and other information is produced
+as output.
+<P>
+
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>--help -h</B>
+
+<DD>
+Displays help, usage information and command-line options.
+<DT><B>--version -v --license</B>
+
+<DD>
+Display version and license information.
+<DT><B>-sc&nbsp;</B><I>score</I>
+
+<DD>
+Set the alignment score threshold to <B>score</B>. Only alignments with 
+scores &gt;= <B>score</B> will be used for further analysis.
+<DT><B>-en&nbsp;</B><I>energy</I>
+
+<DD>
+Set the energy threshold to <B>energy</B>. Only alignments with
+energies &lt;= <B>energy</B> will be used for further analysis. A negative
+value is required for filtering to occur.
+<DT><B>-scale&nbsp;</B><I>scale</I>
+
+<DD>
+Set the scaling parameter to <B>scale</B>. This scaling is applied
+to match / mismatch scores in the critical 7bp region near the 5' end
+of the microRNA. Many known examples of miRNA:Target duplexes
+are highly complementary in this region. This parameter can be thought
+of as a contrast function to more effectively detect alignments of this
+type.
+<DT><B>-strict</B>
+
+<DD>
+Require strict alignment in the seed region (offset positions 2-8).
+This option prevents the detection of target sites which contain gaps
+or non-cannonical base pairing in this region.
+<DT><B>-go&nbsp;</B><I>X</I>
+
+<DD>
+Set the gap-opening penalty to <B>X</B> for alignments. This
+value must be negative.
+<DT><B>-ge&nbsp;</B><I>Y</I>
+
+<DD>
+Set the gap-extend penalty to <B>Y</B> for alignments. This
+value must be negative.
+<DT><B>-out&nbsp;</B><I>fileout</I>
+
+<DD>
+Print results to an output file called <B>fileout</B>.
+<DT><B>-quiet</B>
+
+<DD>
+Quiet mode, omit notices of when scans are starting and when
+sequences have been loaded from input files.
+<DT><B>-trim </B><I>T</I>
+
+<DD>
+Trim reference sequences to <B>T</B> nucleotides. Useful when 
+using noisy predicted 3'UTRs as reference sequences.
+<DT><B>-noenergy</B>
+
+<DD>
+Turn off thermodynamic calculations from RNAlib. If this is
+used, only the alignment score threshold will be used. the <B>-en</B> setting
+will be ignored.
+<DT><B>-restrict&nbsp;</B><I>file</I>
+
+<DD>
+Restrict scans to those between specific miRNAs and UTRs.
+<B>file</B> should contain lines of tab separated pairs
+of sequence identifiers: miRNA_id &lt;tab&gt; target_id.
+</DL>
+<P>
+
+<H2>BUGS</H2>
+
+The option <B>-strict</B> prevents the output of target predictions for
+sites which lack perfect complementarity in the seed region. It does not
+yet insure that all possible sites with perfect complementarity in the
+seed region are found. In unusual circumstances, a perfect seed site may
+overlap with an imperfect seed site in such a way that the imperfect seed
+site has superior alignment score to the perfect seed site. If that happens,
+the optimal local alignment detected will be the imperfect seed site. The
+impact of this bug has been mitigated in this release, but artificial cases
+can still be constructed in which perfect seed sites are not reported.
+<H2>REFERENCES</H2>
+
+If you use this program for your research then please include the following
+citation:
+<P>
+
+A.J. Enright, B. John, U. Gaul, T. Tuschl, C. Sander, D.S. Marks; (2003)
+<BR>
+
+MicroRNA targets in Drosophila; Genome Biology 5(1):R1.
+<P>
+
+RNAlib Citations:
+<P>
+
+I.L. Hofacker, W. Fontana, P.F. Stadler, S. Bonhoeffer, M. Tacker, P. Schuster 
+(1994)
+Fast Folding and Comparison of RNA Secondary Structures.
+Monatshefte f. Chemie 125: 167-188
+<P>
+
+M. Zuker, P. Stiegler (1981) Optimal computer folding of large RNA
+sequences using thermodynamic and auxiliary information, Nucl Acid Res
+9: 133-148
+<P>
+
+J.S. McCaskill (1990) The equilibrium partition function and base pair
+binding probabilities for RNA secondary structures, Biopolymers 29: 1105-1119
+<BR>
+
+<H2>VERSION</H2>
+
+This man page documents version 3.3a of the miRanda package.
+<H2>AUTHORS</H2>
+
+Anton Enright
+
+<P>
+Comments and bug-reports should be sent to <img src="http://cbio.mskcc.org/images/miranda_email.jpg">.
+<P>
+
+<HR>
+</BODY>
+</HTML>

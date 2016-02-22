@@ -1,0 +1,13 @@
+Input files for rebuilding the autoconf files directly:
+configure.in
+Makefile.am
+src/Makefile.am
+RNAlib/Makefile.am
+RNAlib/H/Makefile.am
+man/Makefile.am
+
+autoconf program execution order:
+aclocal
+autoheader
+autoconf
+automake --add-missing
