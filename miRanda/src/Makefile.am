@@ -45,6 +45,6 @@ bin_PROGRAMS = miranda
 miranda_SOURCES = miranda.c output.c scan.c seqio.c swat.c pairs.c thermo.c utils.c ExpString.c
 noinst_HEADERS = miranda.h
 
-LDADD = ../RNAlib/libRNA.a -lm
+LDADD = -L/usr/local/lib -lRNA -lm
 
-INCLUDES = -I../RNAlib/H/
+INCLUDES = -I/usr/local/include/ViennaRNA

@@ -59,7 +59,6 @@ void destroy_globals() {
 }
 
 int main (int argc, char* argv[]) {
-  char fileout[200];
   FILE* fpout = stdout;
   int total_pairs = 0;
   pair_struct* pairs = 0;
@@ -73,7 +72,7 @@ int main (int argc, char* argv[]) {
   gap_extend = -4.0;    /* Gap-extend Penalty*/
   score_threshold = 100.0;  /* SW Score Threshold for reporting hits*/
   energy_threshold = 1.0;   /* Energy Threshold (DG) for reporting hits*/
-  verbosity = 1;      /* Verbose mode on/off*/
+  verbosity = 0;      /* Verbose mode on/off*/
   outfile = 0;      /* Dump to file on/off*/
   truncated = 0;      /* Truncate sequences on/off*/
   no_energy = 0;      /* Turn off Vienna Energy Calcs - FASTER*/
@@ -83,7 +82,7 @@ int main (int argc, char* argv[]) {
     printf("Performing Restricted Scan on:%d pairs\n", total_pairs);
   }
   char* gene_seq = "GCTACAGTTTTTATTTAGCATGGGGATTGCAGAGTGACCAGCACACTGGACTCCGAGGTGGTTCAGACAAGACAGAGGGGAGCAGTGGCCATCATCCTCCCGCCAGGAGCTTCTTCGTTCCTGCGCATATAGACTGTACATTATGAAGAATACCCAGGAAGACTTTGTGACTGTCACTTGCTGCTTTTTCTGCGCTTCAGTAACAAGTGTTGGCAAACGAGACTTTCTCCTGGCCCCTGCCTGCTGGAGATCAGCATGCCTGTCCTTTCAGTCTGATCCATCCATCTCTCTCTTGCCTGAGGGGAAAGAGAGATGGGCCAGGCAGAGAACAGAACTGGAGGCAGTCCATCTA";
-  char* mirna_seq = "UAGCAGCACGUAAAUAUUGGCG";
+  char* mirna_seq = "GCGGUUAUAAAUGCACGACGAU";
   int gene_len = 352, mirna_len = 22;
   find_targets(gene_seq, mirna_seq, gene_len, mirna_len, fpout);
   destroy_globals();

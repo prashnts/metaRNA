@@ -44,7 +44,7 @@
 
 AC_PREREQ(2.60)
 AC_INIT(miRanda, 3.3a, miranda {at} cbio.mskcc.org)
-AC_CONFIG_SRCDIR([RNAlib])
+# AC_CONFIG_SRCDIR([RNAlib])
 AC_CONFIG_HEADER([config.h])
 AC_SUBST(VERSION)
 ISODATE=`date +%Y-%m-%d`
@@ -82,8 +82,6 @@ AC_FUNC_STRTOD
 AC_CHECK_FUNCS([memset sqrt strchr strdup strrchr strstr])
 
 AC_CONFIG_FILES([Makefile
-                 RNAlib/H/Makefile
-                 RNAlib/Makefile
                  man/Makefile
                  src/Makefile])
 AC_OUTPUT
