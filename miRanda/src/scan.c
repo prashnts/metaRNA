@@ -67,7 +67,7 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
       int** c_nt_gap, int** nt_nt_score, char* query_sequence,
       char* reference_sequence, score_struct* scores, int query_length,
       int reference_length, int verbose, HitSummary* hit_summary,
-      char* query_id, char* reference_id, hit_struct* hit, FILE* fpout) {
+      hit_struct* hit, ExpString* outjson) {
 
   int i = 0;
   int j = 0;
@@ -94,6 +94,8 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
   int* good_ones_starts_j, *good_ones_ends_j, good_ones_count;
   int scores_length = 0;
 
+  char delim[3] = "";
+
   good_ones_count = -1;
   good_ones_starts_j = (int*)calloc(reference_length, sizeof(int));
   good_ones_ends_j = (int*)calloc(reference_length, sizeof(int));
@@ -104,7 +106,6 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
   hit_summary->scan_score = 0;
   hit_summary->total_score = 0;
 
-  clear_ExpString(hit_summary->position_list);
   get_nt_nt_seq_scores(nt_nt_score, query_sequence, reference_sequence,
       query_length, reference_length);
 
@@ -229,8 +230,8 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
         if (good_call) {
           scan_score += (energy * -1);
           hit_summary->no_hits++;
-          append_char_ExpString(hit_summary->position_list,' ');
-          append_int_ExpString(hit_summary->position_list,hit->ref_start + 1);
+          append_string_ExpString(hit_summary->position_list, delim);
+          append_int_ExpString(hit_summary->position_list, hit->ref_start + 1);
 
           if (energy < hit_summary->max_hit) {
             hit_summary->max_hit = energy;
@@ -240,7 +241,9 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
             hit_summary->max_score = hit->score;
           }
 
-          printhit(query_length, hit, energy, key_value_pairs, fpout);
+          append_string_ExpString(outjson, delim);
+          printhit(query_length, hit, energy, key_value_pairs, outjson);
+          strcpy(delim, ", ");
         }
       }
     }
@@ -272,12 +275,14 @@ int find_targets(char* gene_seq, char* mirna_seq, int gene_len, int mirna_len, F
   HitSummary hit_summary;   // Summary of best hits for reporting
 
   double end_score = 0.0;
-  char* query_id = "miRNA";
-  char* reference_id = "Gene";
+
+  ExpString *outjson = 0;
+  create_ExpString(&outjson);
 
   hit_summary.position_list = 0;
 
   create_ExpString(&(hit_summary.position_list));
+  append_string_ExpString(hit_summary.position_list, "[");
 
   /* Keep track of the number of sequences scanned so far*/
   utr_processed++;
@@ -333,30 +338,34 @@ int find_targets(char* gene_seq, char* mirna_seq, int gene_len, int mirna_len, F
     track[0][0][i] = track[1][0][i] = track[2][0][i] = track[3][0][i] = 0;
   }
 
+  append_string_ExpString(outjson, "{\"hits\":[");
+
   end_score = do_alignment(best, track, a_nt_nt, b_gap_nt, c_nt_gap,
       nt_nt_score, mirna_seq, gene_seq, scores, mirna_len, gene_len,
-      1, &hit_summary, query_id, reference_id, &hit, fpout);
+      1, &hit_summary, &hit, outjson);
 
+  append_string_ExpString(hit_summary.position_list, "]");
+  append_string_ExpString(outjson, "], ");
+
+  char temp[512];
   if (end_score > 0.0) {
-    fprintf(fpout, "Seq1,Seq2,Tot Score,Tot Energy,Max Score,Max Energy,Strand,Len1,Len2,Positions\n");
-    if (!no_energy) {
-      fprintf(fpout, ">>%s\t%s\t%2.2f\t-%2.2f\t%2.2f\t%2.2f\t%d\t%d\t%d\t%s\n",
-          query_id, reference_id, hit_summary.total_score,
-          end_score, hit_summary.max_score, hit_summary.max_hit,
-          utr_processed, mirna_len, gene_len,
-          access_ExpString(hit_summary.position_list));
-    } else {
-      fprintf(fpout, ">>%s\t%s\t%2.2f\t0.0\t%2.2f\t0.0\t%d\t%d\t%d\t%s\n",
-          query_id, reference_id, hit_summary.total_score,
-          hit_summary.max_score, utr_processed, mirna_len, gene_len,
-          access_ExpString(hit_summary.position_list));
-    }
-    fflush(fpout);
+    sprintf(temp,
+      "\"digest\": {\"total_score\": %2.2f, \"total_energy\": %2.2f, "
+      "\"max_score\": %2.2f, \"max_energy\": %2.2f, \"strand\": %d, "
+      "\"mirna_len\": %d, \"gene_len\": %d, \"positions\": %s}",
+        hit_summary.total_score,
+        end_score, hit_summary.max_score, hit_summary.max_hit,
+        utr_processed, mirna_len, gene_len,
+        access_ExpString(hit_summary.position_list)
+    );
   } else {
-    if (verbosity || debug) {
-      fprintf(fpout, "No Hits Found above Threshold\n");
-    }
+    sprintf(temp, "\"digest\": {\"error\": true}");
   }
+  append_string_ExpString(outjson, temp);
+  append_string_ExpString(outjson, "}\n");
+  fprintf(fpout, access_ExpString(outjson));
+
+  fflush(fpout);
   destroy_ExpString(&(hit_summary.position_list));
   return 1;
 }

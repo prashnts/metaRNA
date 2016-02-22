@@ -263,12 +263,13 @@ void print_parameters(char* filename1, char* filename2, FILE* fpout) {
 }
 
 void printhit(int query_length, hit_struct* hit, double energy,
-		int keyval_mode, FILE* fpout) {
+		int keyval_mode, ExpString* outjson) {
 	double similarity = 0;
 	double identity = 0;
 	int alignment_length = 0;
 	int i = 0;
 	alignment_length = strlen(hit->alignment[0]);
+
 	for (i = 0; i < alignment_length; i++) {
 		if (hit->alignment[1][i] == '|') {
 			similarity++;
@@ -278,41 +279,26 @@ void printhit(int query_length, hit_struct* hit, double energy,
 			similarity++;
 		}
 	}
+
 	similarity = (similarity / (double)alignment_length) * 100;
 	identity = (identity / (double)alignment_length) * 100;
+
 	revstring(hit->alignment[0]);
 	revstring(hit->alignment[1]);
 	revstring(hit->alignment[2]);
-	if (no_energy){
-		energy=0.0;
-	}
 
-	if (!keyval_mode) {
-		fprintf(fpout, "\n   Forward:\tScore: %f  Q:%d to %d  R:%d to %d Align Len (%d) (%3.2f%%) (%3.2f%%)\n\n",
-				hit->score, (query_length - hit->query_end + 1),
-				(query_length - hit->query_start + 1),
-				hit->ref_start + 1, hit->ref_end + 1, alignment_length, identity, similarity);
-		fprintf(fpout, "   Query:    3' %s%s%s 5'\n                %s%s%s\n   Ref:      5' %s%s%s 3'\n\n",
-				hit->rest[0], hit->alignment[0], hit->rest[3], hit->rest[2],
-				hit->alignment[1], hit->rest[5], hit->rest[1], hit->alignment[2], hit->rest[4]);
-		if (!no_energy) {
-			fprintf(fpout, "   Energy:  %f kCal/Mol\n", energy);
-		}
-		fprintf(fpout, "\nScores for this hit:\n");
-		fprintf(fpout, ">\t%2.2f\t%2.2f\t%d %d\t%d %d\t%d\t%3.2f%%\t%3.2f%%\n\n",
-				hit->score, energy, (query_length - hit->query_end + 1),
-				(query_length - hit->query_start + 1), hit->ref_start + 1,
-				hit->ref_end + 1, alignment_length, identity, similarity);
-	} else {
-		fprintf(fpout,
-				"//hit_info\tscore=%f\t"
-				"energy=%f\tquery_start=%d\tquery_end=%d\tref_start=%d\tref_end=%d\t"
-				"aln_length=%d\tidentity=%f\tsimilarity=%f\taln_mirna=%s%s%s\taln_map=%s%s%s\taln_utr=%s%s%s\n",
-				hit->score, energy, (query_length - hit->query_end + 1),
-				(query_length - hit->query_start + 1), hit->ref_start + 1,
-				hit->ref_end + 1, alignment_length, identity, similarity,
-				hit->rest[0], hit->alignment[0], hit->rest[3],
-				hit->rest[2], hit->alignment[1], hit->rest[5],
-				hit->rest[1], hit->alignment[2], hit->rest[4]);
-	}
+	char temp[512];
+	sprintf(temp,
+		"{\"score\": %f, \"energy\": %f, \"query_start\": %d, \"query_end\": %d, "
+		"\"ref_start\": %d, \"ref_end\": %d, \"aln_length\": %d, "
+		"\"identity\": %f, \"similarity\": %f, \"aln_mirna\": \"%s%s%s\", "
+		"\"aln_map\": \"%s%s%s\", \"aln_utr\": \"%s%s%s\"}",
+			hit->score, energy, (query_length - hit->query_end + 1),
+			(query_length - hit->query_start + 1), hit->ref_start + 1,
+			hit->ref_end + 1, alignment_length, identity, similarity,
+			hit->rest[0], hit->alignment[0], hit->rest[3],
+			hit->rest[2], hit->alignment[1], hit->rest[5],
+			hit->rest[1], hit->alignment[2], hit->rest[4]
+		);
+	append_string_ExpString(outjson, temp);
 }

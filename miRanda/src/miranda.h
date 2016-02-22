@@ -117,7 +117,7 @@ int cmpscores(const void*, const void*);
 void string_toupper(char*);
 /*   in output.c */
 int parse_command_line(int, char**, char*, char*, char*, char*);
-void printhit(int, hit_struct*, double, int, FILE*);
+void printhit(int, hit_struct*, double, int, ExpString*);
 void print_parameters(char*, char*, FILE*);
 /*   in thermo.c */
 double get_energy(hit_struct*);
