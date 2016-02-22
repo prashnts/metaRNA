@@ -63,62 +63,87 @@ typedef struct HitSummaryT
 
 const int INITIAL_STRING_SIZE = 64;
 
-double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt, int** c_nt_gap, int** nt_nt_score,
-      char* query_sequence, char* reference_sequence, score_struct* scores,
-      int query_length, int reference_length, int verbose,
-      HitSummary* hit_summary, char* query_id, char* reference_id,
-      hit_struct* hit, FILE* fpout) {
+double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
+      int** c_nt_gap, int** nt_nt_score, char* query_sequence,
+      char* reference_sequence, score_struct* scores, int query_length,
+      int reference_length, int verbose, HitSummary* hit_summary,
+      char* query_id, char* reference_id, hit_struct* hit, FILE* fpout) {
+
   int i = 0;
   int j = 0;
   int utr_offset3p;
   int utr_offset5p;
+
   double energy = 0;
   double scan_score = 0;
+
   int good_call = 0;
   int diff = 0;
+
   char strict_query_construct[200];
   char strict_alignment_construct[200];
+
   int non_gap_count = 0;
   int perfect_match_count = 0;
   int gap_count = 0;
   int mypos = 0;
+
   double hit_score;
+
   int tmp_integer;
   int* good_ones_starts_j, *good_ones_ends_j, good_ones_count;
   int scores_length = 0;
+
   good_ones_count = -1;
   good_ones_starts_j = (int*)calloc(reference_length, sizeof(int));
   good_ones_ends_j = (int*)calloc(reference_length, sizeof(int));
+
   hit_summary->no_hits = 0;
   hit_summary->max_hit = 0;
   hit_summary->max_score = 0;
   hit_summary->scan_score = 0;
   hit_summary->total_score = 0;
+
   clear_ExpString(hit_summary->position_list);
-  get_nt_nt_seq_scores(nt_nt_score, query_sequence, reference_sequence, query_length, reference_length);
-  build_matrix(best, track, a_nt_nt, b_gap_nt, c_nt_gap, nt_nt_score, query_sequence, reference_sequence, query_length, reference_length, scores, &scores_length);
+  get_nt_nt_seq_scores(nt_nt_score, query_sequence, reference_sequence,
+      query_length, reference_length);
+
+  build_matrix(best, track, a_nt_nt, b_gap_nt, c_nt_gap, nt_nt_score,
+      query_sequence, reference_sequence, query_length, reference_length,
+      scores, &scores_length);
+
   for (i = 0; i <= scores_length; i++) {
     utr_offset3p = 0;
     utr_offset5p = 0;
     good_call = 1;
     clear_hit(hit, query_length, reference_length);
     hit_score = scores[i].score;
+
     if (hit_score >= score_threshold) {
-      traceback(best, track, query_sequence, reference_sequence, scores[i].query_trace_end, scores[i].reference_trace_end, hit, hit_score);
-      good_call = testfor_overlap(good_ones_starts_j, good_ones_ends_j, &good_ones_count,
-          hit->ref_start, hit->ref_end);
+      traceback(best, track, query_sequence, reference_sequence,
+          scores[i].query_trace_end, scores[i].reference_trace_end,
+          hit, hit_score);
+
+      good_call = testfor_overlap(good_ones_starts_j, good_ones_ends_j,
+          &good_ones_count, hit->ref_start, hit->ref_end);
+
       if (good_call == 1) {
         good_ones_starts_j[good_ones_count] = hit->ref_start;
         good_ones_ends_j[good_ones_count] = hit->ref_end;
       }
-      /*miRNA alignment, convert un-aligned nt to lowercase, aligned nt to uppercase
-      * hit->rest[0, 1, 2] = The 5' unaligned regions in the query, alignment and ref
-      * hit->rest[3, 4, 5] = The 3' unaligned regions in the query, alignment and ref*/
+
+      /**
+       * miRNA alignment, convert un-aligned nt to lowercase, aligned nt to uppercase
+       * hit->rest[0, 1, 2] = The 5' unaligned regions in the query
+       * hit->rest[3, 4, 5] = The 3' unaligned regions in the query
+       */
+
       if (hit->query_start >= 1) {
         for (j = 0; j <= hit->query_start - 1; j++) {
           diff = hit->query_start - j;
           hit->rest[0][j] = tolower(query_sequence[j]);
           tmp_integer = hit->ref_start - diff;
+
           if (tmp_integer >= 0) {
             hit->rest[1][j] = tolower(reference_sequence[tmp_integer]);
             utr_offset3p++;
@@ -128,37 +153,48 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt, int
           hit->rest[2][j] = ' ';
         }
       }
+
       if (hit->query_end < query_length) {
         for (j = hit->query_end; j < query_length; j++) {
           diff = j - hit->query_end;
           hit->rest[3][j - hit->query_end] = tolower(query_sequence[j]);
           tmp_integer = hit->ref_end + diff;
+
           if (tmp_integer < reference_length) {
-            hit->rest[4][j - hit->query_end] = tolower(reference_sequence[tmp_integer]);
+            hit->rest[4][j - hit->query_end] =
+                tolower(reference_sequence[tmp_integer]);
             utr_offset5p++;
           } else {
             hit->rest[4][j - hit->query_end] = '-';
           }
+
           hit->rest[5][j - hit->query_end] = ' ';
         }
       }
+
       string_toupper(hit->alignment[0]);
       string_toupper(hit->alignment[2]);
+
       /* Adjusting for offset due to local alignment in next two lines*/
       hit->ref_end += (utr_offset5p - 1);
       hit->ref_start -= utr_offset3p;
       mypos = 0;
       non_gap_count = perfect_match_count = gap_count = 0;
+
       /* looks for strict seed matches*/
       if (strict) {
-        sprintf(strict_query_construct, "%s%s%s", hit->rest[3], hit->alignment[0], hit->rest[0]);
-        sprintf(strict_alignment_construct, "%s%s%s", hit->rest[5], hit->alignment[1], hit->rest[2]);
+        sprintf(strict_query_construct, "%s%s%s", hit->rest[3],
+            hit->alignment[0], hit->rest[0]);
+        sprintf(strict_alignment_construct, "%s%s%s", hit->rest[5],
+            hit->alignment[1], hit->rest[2]);
+
         /*traverse the alignment*/
         for (j = 0; j < strlen(strict_query_construct); j++) {
           if (strict_query_construct[j] != '-') {
             /*if no gaps in the miRNA alignment*/
             mypos++;
           }
+
           if ((mypos >= 2) && (mypos <= 8)) {
             if (strict_alignment_construct[j] != ' ') {
               /*if no gaps in the alignment i.e. if `|` or `:`*/
@@ -171,25 +207,31 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt, int
               gap_count++;
             }
           }
-          if (mypos == 8) break;
+
+          if (mypos == 8) {
+            break;
+          }
         }
         /*fail if less than 7 perfect matches or any gaps*/
         if (non_gap_count < 7 || perfect_match_count < 7 || gap_count > 0) {
           good_call = 0;
         }
       }
+
       if (!no_energy) {
         energy = get_energy(hit);
       } else {
         energy = -1000000;
       }
+
       if (energy < energy_threshold) {
-        /* good_call, a good alignment that passes score, energy, etc. requirements*/
+        /* good_call, a good alignment that passes score, energy, etc. */
         if (good_call) {
           scan_score += (energy * -1);
           hit_summary->no_hits++;
           append_char_ExpString(hit_summary->position_list,' ');
           append_int_ExpString(hit_summary->position_list,hit->ref_start + 1);
+
           if (energy < hit_summary->max_hit) {
             hit_summary->max_hit = energy;
           }
@@ -197,7 +239,9 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt, int
           if (hit->score > hit_summary->max_score) {
             hit_summary->max_score = hit->score;
           }
-          printhit(query_id, query_length, reference_id, hit, energy, key_value_pairs, fpout);
+
+          printhit(query_id, query_length, reference_id, hit,
+              energy, key_value_pairs, fpout);
         }
       }
     }

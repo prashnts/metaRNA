@@ -1,6 +1,6 @@
 #include "Python.h"
 
-static PyObject* libpymiranda_parrot(PyObject *self, PyObject *args, PyObject *keywds) {
+static PyObject* libpymiranda_find_targets(PyObject *self, PyObject *args, PyObject *keywds) {
     int voltage;
     char *state = "a stiff";
     char *action = "voom";
