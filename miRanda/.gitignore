@@ -1,0 +1,13 @@
+Makefile
+RNAlib/.deps/
+RNAlib/H/Makefile
+RNAlib/Makefile
+config.h
+config.status
+man/Makefile
+src/.deps/
+src/Makefile
+stamp-h1
+*.o
+*.a
+src/miranda
