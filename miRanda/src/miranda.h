@@ -101,7 +101,8 @@ typedef struct pair_struct
 
 /* Functions Declarations */
 /*   in scan.c */
-int find_targets(FILE*, FILE*, pair_struct*, int, char*);
+// int find_targets(FILE*, FILE*, pair_struct*, int, char*);
+int find_targets(char*, char*, int, int, FILE*);
 /*   in swat.c */
 void traceback(int**, int***, char*, char*, int, int, hit_struct*, double);
 int testfor_overlap(int*, int*, int*, int, int);

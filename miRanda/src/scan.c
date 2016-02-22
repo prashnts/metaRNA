@@ -212,7 +212,7 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt, int
 }
 
 /* Load Sequences and Set-up the Alignment Run*/
-int find_targets(char* gene_seq, char* mirna_seq, int gene_len, int mirna_len, fpout) {
+int find_targets(char* gene_seq, char* mirna_seq, int gene_len, int mirna_len, FILE* fpout) {
   int** best;     /* Best score of all three states (nt-nt, nt-gap, gap-nt*/
   int*** track;     /* Traceback Matrix   */
   int** a_nt_nt;      /* best score for state nt-nt*/
