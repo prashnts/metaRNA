@@ -49,80 +49,80 @@
 #include "miranda.h"
 
 void initialize_globals() {
-	initialize_bases(); /* Prepare the generic base lookup array*/
-	initialize_scores();
-	initialize_seqio_buffers();
+  initialize_bases(); /* Prepare the generic base lookup array*/
+  initialize_scores();
+  initialize_seqio_buffers();
 }
 
 void destroy_globals() {
-	destroy_seqio_buffers();
+  destroy_seqio_buffers();
 }
 
 int main (int argc, char* argv[]) {
-	char filename1[200];
-	char filename2[200];
-	char pairs_file[200];
-	char fileout[200];
-	FILE* query_fp = 0;
-	FILE* reference_fp = 0;
-	FILE* fp_pairs = 0;
-	FILE* fpout = stdout;
-	int total_pairs = 0;
-	pair_struct* pairs = 0;
-	/* Set Default Parameter Values*/
-	length_5p_for_weighting = 8;	/* The 5' sequence length to be weighed  except for the last residue*/
-	scale = 4.0;			/* The 5' miRNA scaling parameter*/
-	strict = 0;			/* Strict seed model on/off*/
-	debug = 0;			/* Debugging mode on/off*/
-	key_value_pairs = 0;
-	gap_open = -9.0;		/* Gap-open Penalty*/
-	gap_extend = -4.0;		/* Gap-extend Penalty*/
-	score_threshold = 140.0;	/* SW Score Threshold for reporting hits*/
-	energy_threshold = 1.0;		/* Energy Threshold (DG) for reporting hits*/
-	verbosity = 1;			/* Verbose mode on/off*/
-	outfile = 0;			/* Dump to file on/off*/
-	truncated = 0;			/* Truncate sequences on/off*/
-	no_energy = 0;			/* Turn off Vienna Energy Calcs - FASTER*/
-	restricted = 0;			/* Perform restricted search space*/
-	parse_command_line(argc, argv, filename1, filename2, fileout, pairs_file);
-	if (gap_open > 0.0 || gap_extend > 0.0) {
-		fprintf(stderr, "Error: gap penalties may not be greater than 0\n");
-		return 1;
-	}
-	if (truncated < 0) {
-		fprintf(stderr, "Error: negative value give for UTR truncation\n");
-		return 1;
-	}
-	if ((query_fp = fopen(filename1, "r")) == NULL) {
-		fprintf(stderr, "Error: Cannot open file %s\n", filename1);
-		return 1;
-	}
-	if ((reference_fp = fopen(filename2, "r")) == NULL) {
-		fprintf(stderr, "Error: Cannot open file %s\n", filename2);
-		return 1;
-	}
-	fclose(reference_fp);
-	if ((outfile) && ((fpout = fopen(fileout, "w")) == NULL)) {
-		fprintf(stderr, "Error: Cannot create output file %s\n", fileout);
-		return 1;
-	}
-	if (restricted) {
-		if ((fp_pairs = fopen(pairs_file, "r")) == NULL) {
-			fprintf(stderr, "Error: Cannot open restrict pairs file %s\n", pairs_file);
-			return 1;
-		}
-		/* Initialize the pairs list for restriced searches*/
-		total_pairs = load_pairs(fp_pairs, &pairs);
-		fclose(fp_pairs);
-	}
-	initialize_globals();
-	print_parameters(filename1, filename2, fpout);
-	if (restricted && verbosity) {
-		printf("Performing Restricted Scan on:%d pairs\n", total_pairs);
-	}
-	find_targets(query_fp, fpout, pairs, total_pairs, filename2);
-	destroy_globals();
-	if (outfile) fclose(fpout);
-	fclose(query_fp);
-	return 0;
+  char filename1[200];
+  char filename2[200];
+  char pairs_file[200];
+  char fileout[200];
+  FILE* query_fp = 0;
+  FILE* reference_fp = 0;
+  FILE* fp_pairs = 0;
+  FILE* fpout = stdout;
+  int total_pairs = 0;
+  pair_struct* pairs = 0;
+  /* Set Default Parameter Values*/
+  length_5p_for_weighting = 8;  /* The 5' sequence length to be weighed  except for the last residue*/
+  scale = 4.0;      /* The 5' miRNA scaling parameter*/
+  strict = 0;     /* Strict seed model on/off*/
+  debug = 0;      /* Debugging mode on/off*/
+  key_value_pairs = 0;
+  gap_open = -9.0;    /* Gap-open Penalty*/
+  gap_extend = -4.0;    /* Gap-extend Penalty*/
+  score_threshold = 140.0;  /* SW Score Threshold for reporting hits*/
+  energy_threshold = 1.0;   /* Energy Threshold (DG) for reporting hits*/
+  verbosity = 1;      /* Verbose mode on/off*/
+  outfile = 0;      /* Dump to file on/off*/
+  truncated = 0;      /* Truncate sequences on/off*/
+  no_energy = 0;      /* Turn off Vienna Energy Calcs - FASTER*/
+  restricted = 0;     /* Perform restricted search space*/
+  parse_command_line(argc, argv, filename1, filename2, fileout, pairs_file);
+  if (gap_open > 0.0 || gap_extend > 0.0) {
+    fprintf(stderr, "Error: gap penalties may not be greater than 0\n");
+    return 1;
+  }
+  if (truncated < 0) {
+    fprintf(stderr, "Error: negative value give for UTR truncation\n");
+    return 1;
+  }
+  if ((query_fp = fopen(filename1, "r")) == NULL) {
+    fprintf(stderr, "Error: Cannot open file %s\n", filename1);
+    return 1;
+  }
+  if ((reference_fp = fopen(filename2, "r")) == NULL) {
+    fprintf(stderr, "Error: Cannot open file %s\n", filename2);
+    return 1;
+  }
+  fclose(reference_fp);
+  if ((outfile) && ((fpout = fopen(fileout, "w")) == NULL)) {
+    fprintf(stderr, "Error: Cannot create output file %s\n", fileout);
+    return 1;
+  }
+  if (restricted) {
+    if ((fp_pairs = fopen(pairs_file, "r")) == NULL) {
+      fprintf(stderr, "Error: Cannot open restrict pairs file %s\n", pairs_file);
+      return 1;
+    }
+    /* Initialize the pairs list for restriced searches*/
+    total_pairs = load_pairs(fp_pairs, &pairs);
+    fclose(fp_pairs);
+  }
+  initialize_globals();
+  print_parameters(filename1, filename2, fpout);
+  if (restricted && verbosity) {
+    printf("Performing Restricted Scan on:%d pairs\n", total_pairs);
+  }
+  find_targets(query_fp, fpout, pairs, total_pairs, filename2);
+  destroy_globals();
+  if (outfile) fclose(fpout);
+  fclose(query_fp);
+  return 0;
 }
