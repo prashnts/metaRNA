@@ -1,64 +1,44 @@
 #include "Python.h"
 
-struct module_state {
-    PyObject *error;
-};
+static PyObject* libpymiranda_parrot(PyObject *self, PyObject *args, PyObject *keywds) {
+    int voltage;
+    char *state = "a stiff";
+    char *action = "voom";
+    char *type = "Norwegian Blue";
 
-#define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
+    static char *kwlist[] = {"voltage", "state", "action", "type", NULL};
 
-static PyObject *
-error_out(PyObject *m) {
-    struct module_state *st = GETSTATE(m);
-    PyErr_SetString(st->error, "something bad happened");
-    return NULL;
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "i|sss", kwlist,
+                                     &voltage, &state, &action, &type))
+        return NULL;
+
+    printf("-- This parrot wouldn't %s if you put %i Volts through it.\n",
+           action, voltage);
+    printf("-- Lovely plumage, the %s -- It's %s!\n", type, state);
+
+    Py_RETURN_NONE;
 }
 
 static PyMethodDef libpymiranda_methods[] = {
-    {"error_out", (PyCFunction)error_out, METH_NOARGS, NULL},
-    {NULL, NULL}
+    /* The cast of the function is necessary since PyCFunction values
+     * only take two PyObject* parameters, and libpymiranda_parrot() takes
+     * three.
+     */
+    {"parrot", (PyCFunction)libpymiranda_parrot, METH_VARARGS | METH_KEYWORDS,
+     "Print a lovely skit to standard output."},
+    {NULL, NULL, 0, NULL}   /* sentinel */
 };
 
-
-static int libpymiranda_traverse(PyObject *m, visitproc visit, void *arg) {
-    Py_VISIT(GETSTATE(m)->error);
-    return 0;
-}
-
-static int libpymiranda_clear(PyObject *m) {
-    Py_CLEAR(GETSTATE(m)->error);
-    return 0;
-}
-
-
-static struct PyModuleDef moduledef = {
-        PyModuleDef_HEAD_INIT,
-        "libpymiranda",
-        NULL,
-        sizeof(struct module_state),
-        libpymiranda_methods,
-        NULL,
-        libpymiranda_traverse,
-        libpymiranda_clear,
-        NULL
+static struct PyModuleDef libpymirandamodule = {
+    PyModuleDef_HEAD_INIT,
+    "libpymiranda",
+    NULL,
+    -1,
+    libpymiranda_methods
 };
 
-#define INITERROR return NULL
-
-PyObject *
+PyMODINIT_FUNC
 PyInit_libpymiranda(void)
-
 {
-    PyObject *module = PyModule_Create(&moduledef);
-
-    if (module == NULL)
-        INITERROR;
-    struct module_state *st = GETSTATE(module);
-
-    st->error = PyErr_NewException("libpymiranda.Error", NULL, NULL);
-    if (st->error == NULL) {
-        Py_DECREF(module);
-        INITERROR;
-    }
-
-    return module;
+    return PyModule_Create(&libpymirandamodule);
 }

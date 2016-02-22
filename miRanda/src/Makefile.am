@@ -42,7 +42,7 @@
 #
 
 bin_PROGRAMS = miranda
-miranda_SOURCES = miranda.c output.c scan.c seqio.c swat.c pairs.c thermo.c utils.c ExpString.c
+miranda_SOURCES = miranda.c output.c scan.c swat.c thermo.c utils.c ExpString.c
 noinst_HEADERS = miranda.h
 
 LDADD = -L/usr/local/lib -lRNA -lm

@@ -110,10 +110,6 @@ void build_matrix(int**, int***, int**, int**, int**, int**, char*, char*, int, 
 void get_nt_nt_seq_scores(int**, char*, char*, int, int);
 void initialize_bases();
 void initialize_scores();
-/*   in seqio.c */
-int readinseq(FILE*, char**, char**, char**, int *);
-void initialize_seqio_buffers();
-void destroy_seqio_buffers();
 /*   in utils.c */
 void revstring(char s[]);
 void clear_hit(hit_struct*, int, int);
@@ -123,8 +119,5 @@ void string_toupper(char*);
 int parse_command_line(int, char**, char*, char*, char*, char*);
 void printhit(char*, int, char*, hit_struct*, double, int, FILE*);
 void print_parameters(char*, char*, FILE*);
-/*   in pairs.c */
-int load_pairs(FILE*, pair_struct**);
-int find_pair(char*, char*, int, pair_struct*);
 /*   in thermo.c */
 double get_energy(hit_struct*);

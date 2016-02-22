@@ -51,17 +51,11 @@
 void initialize_globals() {
   initialize_bases(); /* Prepare the generic base lookup array*/
   initialize_scores();
-  initialize_seqio_buffers();
-}
-
-void destroy_globals() {
-  destroy_seqio_buffers();
 }
 
 int main (int argc, char* argv[]) {
   FILE* fpout = stdout;
   int total_pairs = 0;
-  pair_struct* pairs = 0;
   /* Set Default Parameter Values*/
   length_5p_for_weighting = 8;  /* The 5' sequence length to be weighed  except for the last residue*/
   scale = 4.0;      /* The 5' miRNA scaling parameter*/
@@ -85,7 +79,6 @@ int main (int argc, char* argv[]) {
   char* mirna_seq = "GCGGUUAUAAAUGCACGACGAU";
   int gene_len = 352, mirna_len = 22;
   find_targets(gene_seq, mirna_seq, gene_len, mirna_len, fpout);
-  destroy_globals();
   if (outfile) fclose(fpout);
   return 0;
 }
