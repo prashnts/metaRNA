@@ -262,7 +262,8 @@ void print_parameters(char* filename1, char* filename2, FILE* fpout) {
 	fprintf(fpout, "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 }
 
-void printhit(char* query_id, int query_length, char* reference_id, hit_struct* hit, double energy, int keyval_mode, FILE* fpout) {
+void printhit(int query_length, hit_struct* hit, double energy,
+		int keyval_mode, FILE* fpout) {
 	double similarity = 0;
 	double identity = 0;
 	int alignment_length = 0;
@@ -285,6 +286,7 @@ void printhit(char* query_id, int query_length, char* reference_id, hit_struct* 
 	if (no_energy){
 		energy=0.0;
 	}
+
 	if (!keyval_mode) {
 		fprintf(fpout, "\n   Forward:\tScore: %f  Q:%d to %d  R:%d to %d Align Len (%d) (%3.2f%%) (%3.2f%%)\n\n",
 				hit->score, (query_length - hit->query_end + 1),
@@ -297,19 +299,18 @@ void printhit(char* query_id, int query_length, char* reference_id, hit_struct* 
 			fprintf(fpout, "   Energy:  %f kCal/Mol\n", energy);
 		}
 		fprintf(fpout, "\nScores for this hit:\n");
-		fprintf(fpout, ">%s\t%s\t%2.2f\t%2.2f\t%d %d\t%d %d\t%d\t%3.2f%%\t%3.2f%%\n\n",
-				query_id, reference_id, hit->score, energy,
-				(query_length - hit->query_end + 1), (query_length - hit->query_start + 1),
-				hit->ref_start + 1, hit->ref_end + 1, alignment_length, identity, similarity);
+		fprintf(fpout, ">\t%2.2f\t%2.2f\t%d %d\t%d %d\t%d\t%3.2f%%\t%3.2f%%\n\n",
+				hit->score, energy, (query_length - hit->query_end + 1),
+				(query_length - hit->query_start + 1), hit->ref_start + 1,
+				hit->ref_end + 1, alignment_length, identity, similarity);
 	} else {
 		fprintf(fpout,
-				"//hit_info\tquery_id=%s\treference_id=%s\tscore=%f\t"
+				"//hit_info\tscore=%f\t"
 				"energy=%f\tquery_start=%d\tquery_end=%d\tref_start=%d\tref_end=%d\t"
 				"aln_length=%d\tidentity=%f\tsimilarity=%f\taln_mirna=%s%s%s\taln_map=%s%s%s\taln_utr=%s%s%s\n",
-				query_id, reference_id, hit->score, energy,
-				(query_length - hit->query_end + 1), (query_length - hit->query_start + 1),
-				hit->ref_start + 1, hit->ref_end + 1,
-				alignment_length, identity, similarity,
+				hit->score, energy, (query_length - hit->query_end + 1),
+				(query_length - hit->query_start + 1), hit->ref_start + 1,
+				hit->ref_end + 1, alignment_length, identity, similarity,
 				hit->rest[0], hit->alignment[0], hit->rest[3],
 				hit->rest[2], hit->alignment[1], hit->rest[5],
 				hit->rest[1], hit->alignment[2], hit->rest[4]);

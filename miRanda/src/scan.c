@@ -240,8 +240,7 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
             hit_summary->max_score = hit->score;
           }
 
-          printhit(query_id, query_length, reference_id, hit,
-              energy, key_value_pairs, fpout);
+          printhit(query_length, hit, energy, key_value_pairs, fpout);
         }
       }
     }

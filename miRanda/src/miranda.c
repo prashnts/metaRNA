@@ -61,7 +61,7 @@ int main (int argc, char* argv[]) {
   scale = 4.0;      /* The 5' miRNA scaling parameter*/
   strict = 0;     /* Strict seed model on/off*/
   debug = 0;      /* Debugging mode on/off*/
-  key_value_pairs = 0;
+  key_value_pairs = 1;
   gap_open = -9.0;    /* Gap-open Penalty*/
   gap_extend = -4.0;    /* Gap-extend Penalty*/
   score_threshold = 100.0;  /* SW Score Threshold for reporting hits*/

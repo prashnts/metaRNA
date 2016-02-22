@@ -21,10 +21,10 @@ static PyObject* libpymiranda_find_targets(PyObject *self, PyObject *args, PyObj
 
 static PyMethodDef libpymiranda_methods[] = {
     /* The cast of the function is necessary since PyCFunction values
-     * only take two PyObject* parameters, and libpymiranda_parrot() takes
+     * only take two PyObject* parameters, and libpymiranda_find_targets() takes
      * three.
      */
-    {"parrot", (PyCFunction)libpymiranda_parrot, METH_VARARGS | METH_KEYWORDS,
+    {"parrot", (PyCFunction)libpymiranda_find_targets, METH_VARARGS | METH_KEYWORDS,
      "Print a lovely skit to standard output."},
     {NULL, NULL, 0, NULL}   /* sentinel */
 };
