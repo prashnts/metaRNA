@@ -257,30 +257,33 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
 
 /* Load Sequences and Set-up the Alignment Run*/
 int find_targets(char* gene_seq, char* mirna_seq, int gene_len, int mirna_len, FILE* fpout) {
-  int** best;     /* Best score of all three states (nt-nt, nt-gap, gap-nt*/
-  int*** track;     /* Traceback Matrix   */
-  int** a_nt_nt;      /* best score for state nt-nt*/
-  int** b_gap_nt;     /* best score for state gap-nt*/
-  int** c_nt_gap;     /* best score for state nt-gap*/
-  int** nt_nt_score;    /* nt nt match matrix for easy lookup*/
+  int** best;         // Best score of all three states (nt-nt, nt-gap, gap-nt)
+  int*** track;       // Traceback Matrix
+  int** a_nt_nt;      // Best score for state nt-nt
+  int** b_gap_nt;     // Best score for state gap-nt
+  int** c_nt_gap;     // Best score for state nt-gap
+  int** nt_nt_score;  // nt nt match matrix for easy lookup
+
   int utr_processed = 0;
   int mirna_processed = 0;
   int i = 0;
-  hit_struct hit;     /*Struct to store hit information*/
-  score_struct* scores;   /*Score struct for non-optimal path detection*/
-  HitSummary hit_summary;   /*Summary of best hits for reporting*/
+
+  hit_struct hit;           // Struct to store hit information
+  score_struct* scores;     // Score struct for non-optimal path detection
+  HitSummary hit_summary;   // Summary of best hits for reporting
+
   double end_score = 0.0;
-
   char* query_id = "miRNA";
-
   char* reference_id = "Gene";
+
   hit_summary.position_list = 0;
+
   create_ExpString(&(hit_summary.position_list));
-  /* Read the query sequence(s) (microRNA(s)) from a FASTA file*/
 
   /* Keep track of the number of sequences scanned so far*/
   utr_processed++;
   length_3p_for_weighting = mirna_len - length_5p_for_weighting;
+
   /* Initialize the hit / alignment constructs for this sequence*/
   hit.alignment[0] = calloc(mirna_len + gene_len, sizeof(char));
   hit.alignment[1] = calloc(mirna_len + gene_len, sizeof(char));
@@ -291,20 +294,23 @@ int find_targets(char* gene_seq, char* mirna_seq, int gene_len, int mirna_len, F
   hit.rest[3] = calloc(mirna_len + 10, sizeof(char));
   hit.rest[4] = calloc(mirna_len + 10, sizeof(char));
   hit.rest[5] = calloc(mirna_len + 10, sizeof(char));
+
   /* Structure for sub-optimal score list*/
   scores = (score_struct*)calloc(mirna_len * gene_len, sizeof(score_struct));
-  /* Initialize the three alignment matrices*/
 
+  /* Initialize the three alignment matrices*/
   best = calloc((mirna_len + 1), sizeof(int*));
   track = (int***)calloc(4, sizeof(int**));
   a_nt_nt = calloc((mirna_len + 1), sizeof(int*));
   b_gap_nt = calloc((mirna_len + 1), sizeof(int*));
   c_nt_gap = calloc((mirna_len + 1), sizeof(int*));
   nt_nt_score = calloc((mirna_len + 1), sizeof(int*));
+
   /*Initialize 4-D call-back matrix*/
   for (i = 0; i < 4; i++) {
     track[i]= (int**)calloc((mirna_len + 1), sizeof(int*));
   }
+
   for (i = 0; i <= mirna_len; i++) {
     best[i] = calloc((gene_len + 1), sizeof(int));
     track[0][i] = (int*)calloc((gene_len + 1), sizeof(int));
@@ -320,24 +326,18 @@ int find_targets(char* gene_seq, char* mirna_seq, int gene_len, int mirna_len, F
     b_gap_nt[i][0] = 0;
     c_nt_gap[i][0] = 0;
   }
+
   for (i = 0; i < gene_len + 1; i++) {
     best[0][i] = a_nt_nt[0][i] = nt_nt_score[0][i] = 0;
     b_gap_nt[0][i] = 0;
     c_nt_gap[0][i] = 0;
     track[0][0][i] = track[1][0][i] = track[2][0][i] = track[3][0][i] = 0;
   }
-  if(verbosity || debug) {
-    fprintf(fpout, "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-    fprintf(fpout, "Performing Scan: %s vs %s\n", query_id, reference_id);
-    fprintf(fpout, "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-    fflush(fpout);
-  }
-  end_score = do_alignment(best, track, a_nt_nt, b_gap_nt, c_nt_gap, nt_nt_score,
-      mirna_seq, gene_seq, scores, mirna_len, gene_len,
+
+  end_score = do_alignment(best, track, a_nt_nt, b_gap_nt, c_nt_gap,
+      nt_nt_score, mirna_seq, gene_seq, scores, mirna_len, gene_len,
       1, &hit_summary, query_id, reference_id, &hit, fpout);
-  if (verbosity || debug) {
-    fprintf(fpout, "Score for this Scan:\n");
-  }
+
   if (end_score > 0.0) {
     fprintf(fpout, "Seq1,Seq2,Tot Score,Tot Energy,Max Score,Max Energy,Strand,Len1,Len2,Positions\n");
     if (!no_energy) {
@@ -358,11 +358,6 @@ int find_targets(char* gene_seq, char* mirna_seq, int gene_len, int mirna_len, F
       fprintf(fpout, "No Hits Found above Threshold\n");
     }
   }
-  if (verbosity || debug || end_score > 0.0) {
-    fprintf(fpout, "Complete\n\n");
-  }
-
   destroy_ExpString(&(hit_summary.position_list));
-
   return 1;
 }
