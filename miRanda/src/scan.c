@@ -380,7 +380,7 @@ char* find_targets(char* gene_seq, char* mirna_seq) {
     sprintf(temp, "\"digest\": {\"error\": true}");
   }
   append_string_ExpString(outjson, temp);
-  append_string_ExpString(outjson, "}\n");
+  append_string_ExpString(outjson, "}");
 
   destroy_ExpString(&(hit_summary.position_list));
   return access_ExpString(outjson);

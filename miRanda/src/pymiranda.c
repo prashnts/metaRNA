@@ -36,7 +36,7 @@ static PyObject* libpymiranda_find_targets(PyObject *self, PyObject *args, PyObj
   initialize_scores();
     static char *kwlist[] = {"gene_seq", "mirna_seq", NULL};
 
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "ss", kwlist,
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "|ss", kwlist,
                                      &gene_seq, &mirna_seq))
         return NULL;
 
