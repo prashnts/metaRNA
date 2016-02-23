@@ -48,6 +48,21 @@
 #include <ctype.h>
 #include "miranda.h"
 
+extern double scale;
+extern int strict;
+extern int debug;
+extern double gap_open;
+extern double gap_extend;
+extern double score_threshold;
+extern double energy_threshold;
+extern int length_5p_for_weighting;
+extern int length_3p_for_weighting;
+extern int key_value_pairs;
+extern int no_energy;
+extern int verbosity;
+extern int truncated;
+extern int restricted;
+
 int cmpscores(const void* p1, const void* p2) {
 	score_struct* s1 = (score_struct*)p1;
 	score_struct* s2 = (score_struct*)p2;

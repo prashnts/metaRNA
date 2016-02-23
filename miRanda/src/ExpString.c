@@ -46,6 +46,21 @@
 #include <string.h>
 #include "miranda.h"
 
+extern double scale;
+extern int strict;
+extern int debug;
+extern double gap_open;
+extern double gap_extend;
+extern double score_threshold;
+extern double energy_threshold;
+extern int length_5p_for_weighting;
+extern int length_3p_for_weighting;
+extern int key_value_pairs;
+extern int no_energy;
+extern int verbosity;
+extern int truncated;
+extern int restricted;
+
 /* expanding_string - a string module which auto-allocates memory */
 const int ExpString_START_MEM = 64;
 const int ExpString_GROW_NUMERATOR = 3;

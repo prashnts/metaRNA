@@ -50,6 +50,21 @@
 #include <ctype.h>
 #include "miranda.h"
 
+extern double scale;
+extern int strict;
+extern int debug;
+extern double gap_open;
+extern double gap_extend;
+extern double score_threshold;
+extern double energy_threshold;
+extern int length_5p_for_weighting;
+extern int length_3p_for_weighting;
+extern int key_value_pairs;
+extern int no_energy;
+extern int verbosity;
+extern int truncated;
+extern int restricted;
+
 /* summary of best hits for reporting - for convenient argument passing */
 typedef struct HitSummaryT
 {
@@ -258,13 +273,16 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
 }
 
 /* Load Sequences and Set-up the Alignment Run*/
-int find_targets(char* gene_seq, char* mirna_seq, int gene_len, int mirna_len, FILE* fpout) {
+char* find_targets(char* gene_seq, char* mirna_seq) {
   int** best;         // Best score of all three states (nt-nt, nt-gap, gap-nt)
   int*** track;       // Traceback Matrix
   int** a_nt_nt;      // Best score for state nt-nt
   int** b_gap_nt;     // Best score for state gap-nt
   int** c_nt_gap;     // Best score for state nt-gap
   int** nt_nt_score;  // nt nt match matrix for easy lookup
+
+  int gene_len  = strlen(gene_seq);
+  int mirna_len = strlen(mirna_seq);
 
   int utr_processed = 0;
   int mirna_processed = 0;
@@ -363,9 +381,7 @@ int find_targets(char* gene_seq, char* mirna_seq, int gene_len, int mirna_len, F
   }
   append_string_ExpString(outjson, temp);
   append_string_ExpString(outjson, "}\n");
-  fprintf(fpout, access_ExpString(outjson));
 
-  fflush(fpout);
   destroy_ExpString(&(hit_summary.position_list));
-  return 1;
+  return access_ExpString(outjson);
 }

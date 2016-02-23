@@ -1,22 +1,48 @@
 #include "Python.h"
 
+#include <config.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "miranda.h"
+
+double scale = 4.0;
+int strict = 0;
+int debug = 0;
+double gap_open = -9.0;
+double gap_extend = -4.0;
+double score_threshold = 100.0;
+double energy_threshold = 1.0;
+int length_5p_for_weighting = 8;
+int length_3p_for_weighting;
+int key_value_pairs = 1;
+int no_energy = 0;
+int verbosity = 0;
+int truncated = 0;
+int restricted = 0;
+
 static PyObject* libpymiranda_find_targets(PyObject *self, PyObject *args, PyObject *keywds) {
-    int voltage;
-    char *state = "a stiff";
-    char *action = "voom";
-    char *type = "Norwegian Blue";
 
-    static char *kwlist[] = {"voltage", "state", "action", "type", NULL};
+  char* gene_seq = "GCTACAGTTTTTATTTAGCATGGGGATTGCAGAGTGACCAGCACACTGGACTCC"
+    "GAGGTGGTTCAGACAAGACAGAGGGGAGCAGTGGCCATCATCCTCCCGCCAGGAGCTTCTTCGTTCCTG"
+    "CGCATATAGACTGTACATTATGAAGAATACCCAGGAAGACTTTGTGACTGTCACTTGCTGCTTTTTCTG"
+    "CGCTTCAGTAACAAGTGTTGGCAAACGAGACTTTCTCCTGGCCCCTGCCTGCTGGAGATCAGCATGCCT"
+    "GTCCTTTCAGTCTGATCCATCCATCTCTCTCTTGCCTGAGGGGAAAGAGAGATGGGCCAGGCAGAGAAC"
+    "AGAACTGGAGGCAGTCCATCTA";
 
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "i|sss", kwlist,
-                                     &voltage, &state, &action, &type))
+  char* mirna_seq = "UAGCAGCACGUAAAUAUUGGCG";
+
+  initialize_bases(); /* Prepare the generic base lookup array*/
+  initialize_scores();
+    static char *kwlist[] = {"gene_seq", "mirna_seq", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "ss", kwlist,
+                                     &gene_seq, &mirna_seq))
         return NULL;
 
-    printf("-- This parrot wouldn't %s if you put %i Volts through it.\n",
-           action, voltage);
-    printf("-- Lovely plumage, the %s -- It's %s!\n", type, state);
+    char* obj = find_targets(gene_seq, mirna_seq);
 
-    Py_RETURN_NONE;
+    return Py_BuildValue("s", obj);
 }
 
 static PyMethodDef libpymiranda_methods[] = {
@@ -24,7 +50,7 @@ static PyMethodDef libpymiranda_methods[] = {
      * only take two PyObject* parameters, and libpymiranda_find_targets() takes
      * three.
      */
-    {"parrot", (PyCFunction)libpymiranda_find_targets, METH_VARARGS | METH_KEYWORDS,
+    {"find_targets", (PyCFunction)libpymiranda_find_targets, METH_VARARGS | METH_KEYWORDS,
      "Print a lovely skit to standard output."},
     {NULL, NULL, 0, NULL}   /* sentinel */
 };

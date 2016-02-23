@@ -67,18 +67,13 @@ int main (int argc, char* argv[]) {
   score_threshold = 100.0;  /* SW Score Threshold for reporting hits*/
   energy_threshold = 1.0;   /* Energy Threshold (DG) for reporting hits*/
   verbosity = 0;      /* Verbose mode on/off*/
-  outfile = 0;      /* Dump to file on/off*/
   truncated = 0;      /* Truncate sequences on/off*/
   no_energy = 0;      /* Turn off Vienna Energy Calcs - FASTER*/
   restricted = 0;     /* Perform restricted search space*/
   initialize_globals();
-  if (restricted && verbosity) {
-    printf("Performing Restricted Scan on:%d pairs\n", total_pairs);
-  }
   char* gene_seq = "GCTACAGTTTTTATTTAGCATGGGGATTGCAGAGTGACCAGCACACTGGACTCCGAGGTGGTTCAGACAAGACAGAGGGGAGCAGTGGCCATCATCCTCCCGCCAGGAGCTTCTTCGTTCCTGCGCATATAGACTGTACATTATGAAGAATACCCAGGAAGACTTTGTGACTGTCACTTGCTGCTTTTTCTGCGCTTCAGTAACAAGTGTTGGCAAACGAGACTTTCTCCTGGCCCCTGCCTGCTGGAGATCAGCATGCCTGTCCTTTCAGTCTGATCCATCCATCTCTCTCTTGCCTGAGGGGAAAGAGAGATGGGCCAGGCAGAGAACAGAACTGGAGGCAGTCCATCTA";
   char* mirna_seq = "GCGGUUAUAAAUGCACGACGAU";
-  int gene_len = 352, mirna_len = 22;
-  find_targets(gene_seq, mirna_seq, gene_len, mirna_len, fpout);
-  if (outfile) fclose(fpout);
+  char* obj = find_targets(gene_seq, mirna_seq);
+  printf(obj);
   return 0;
 }
