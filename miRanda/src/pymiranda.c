@@ -1,6 +1,6 @@
 #include "Python.h"
 
-#include <config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,8 +19,8 @@ int length_3p_for_weighting;
 static PyObject* libpymiranda_find_targets(PyObject *self,
     PyObject *args, PyObject *keywds) {
 
-  char* gene_seq;
-  char* mirna_seq;
+  char* gene_seq = NULL;
+  char* mirna_seq = NULL;
 
   initialize_bases();
   initialize_scores();
@@ -36,6 +36,10 @@ static PyObject* libpymiranda_find_targets(PyObject *self,
     &score_threshold, &energy_threshold, &length_5p_for_weighting,
     &temperature_override
   );
+
+  if (gene_seq == NULL || mirna_seq == NULL) {
+    return NULL;
+  }
 
   ExpString *outjson = 0;
   create_ExpString(&outjson);
@@ -62,14 +66,20 @@ static PyMethodDef libpymiranda_methods[] = {
   {NULL, NULL, 0, NULL}
 };
 
-static struct PyModuleDef libpymirandamodule = {
-  PyModuleDef_HEAD_INIT,
-  "libpymiranda",
-  NULL,
-  -1,
-  libpymiranda_methods
-};
+#if PY_MAJOR_VERSION >= 3
+  static struct PyModuleDef libpymirandamodule = {
+    PyModuleDef_HEAD_INIT,
+    "libpymiranda",
+    NULL,
+    -1,
+    libpymiranda_methods
+  };
 
-PyMODINIT_FUNC PyInit_libpymiranda(void) {
-  return PyModule_Create(&libpymirandamodule);
-}
+  PyMODINIT_FUNC PyInit_pymiranda(void) {
+    return PyModule_Create(&libpymirandamodule);
+  }
+#else
+  PyMODINIT_FUNC initpymiranda(void) {
+   (void) Py_InitModule("libpymiranda", libpymiranda_methods);
+  }
+#endif

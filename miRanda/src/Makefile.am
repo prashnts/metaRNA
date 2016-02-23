@@ -1,5 +1,5 @@
 
-libpymirandadir = $(pkgpythondir)
+libpymirandadir = $(PYTHON_LOC)lib/python3.5/site-packages/
 
 pyexec_LTLIBRARIES = libpymiranda.la
 libpymiranda_la_LDFLAGS = -module -avoid-version -export-symbols-regex PyInit_libpymiranda

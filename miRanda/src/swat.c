@@ -6,7 +6,7 @@
  * Copyright (C) (2003) Memorial Sloan-Kettering Cancer Center, New York
  */
 
-#include <config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
