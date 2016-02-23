@@ -13,12 +13,13 @@
 #include "fold.h"
 #include "miranda.h"
 
+extern int temperature_override;
 
 double vfold(char* sequence) {
 	void* struct1;
 	double e1;
 	struct1 = (char*)space(sizeof(char) * (strlen(sequence) + 1));
-	temperature = 30;
+	temperature = temperature_override;
 	e1 = fold(sequence, struct1);
 	free_arrays();
 	free(struct1);

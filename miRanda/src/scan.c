@@ -218,7 +218,7 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
 }
 
 /* Load Sequences and Set-up the Alignment Run*/
-char* find_targets(char* gene_seq, char* mirna_seq) {
+void find_targets(char* gene_seq, char* mirna_seq, ExpString* outjson) {
   int** best;         // Best score of all three states (nt-nt, nt-gap, gap-nt)
   int*** track;       // Traceback Matrix
   int** a_nt_nt;      // Best score for state nt-nt
@@ -236,9 +236,6 @@ char* find_targets(char* gene_seq, char* mirna_seq) {
   HitSummary hit_summary;   // Summary of best hits for reporting
 
   double end_score = 0.0;
-
-  ExpString *outjson = 0;
-  create_ExpString(&outjson);
 
   hit_summary.position_list = 0;
 
@@ -307,7 +304,11 @@ char* find_targets(char* gene_seq, char* mirna_seq) {
   append_string_ExpString(hit_summary.position_list, "]");
   append_string_ExpString(outjson, "], ");
 
-  char temp[512];
+  int len_pos = length_ExpString(hit_summary.position_list);
+  char *temp;
+
+  temp = (char *)malloc(len_pos + 256);
+
   if (end_score > 0.0) {
     sprintf(temp,
       "\"digest\": {\"total_score\": %2.2f, \"total_energy\": %2.2f, "
@@ -323,7 +324,7 @@ char* find_targets(char* gene_seq, char* mirna_seq) {
   }
   append_string_ExpString(outjson, temp);
   append_string_ExpString(outjson, "}");
+  free(temp);
 
   destroy_ExpString(&(hit_summary.position_list));
-  return access_ExpString(outjson);
 }
