@@ -1,46 +1,3 @@
-/* scan.c */
-/* -------------------------------------------------------------------
- * miRanda- An miRNA target scanner, aims to predict mRNA targets for microRNAs,
- * using dynamic-programming alignment and thermodynamics
- *
- * Copyright (C) (2003) Memorial Sloan-Kettering Cancer Center, New York
- *
- * Distributed under the GNU Public License (GPL)
- * See the files 'COPYING' and 'LICENSE' for details
- *
- * Authors: Anton Enright, Bino John, Chris Sander and Debora Marks
- * Email: mirnatargets (at) cbio.mskcc.org - reaches all authors
- *
- * Written By: Anton Enright
- *
- * Please send bug reports to: miranda (at) cbio.mskcc.org
- *
- * If you use miRanda in your research please cite:
- * Enright AJ, John B, Gaul U, Tuschl T, Sander C and Marks DS;
- * (2003) Genome Biology; 5(1):R1.
- *
- * This software will be further developed under the open source model,
- * coordinated by Anton Enright and Chris Sander:
- * miranda (at) cbio.mskcc.org (reaches both).
- *
- * Copyright (C) (2003) Memorial Sloan-Kettering Cancer Center
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * -------------------------------------------------------------------
- */
 
 #include <config.h>
 #include <stdio.h>
@@ -50,20 +7,12 @@
 #include <ctype.h>
 #include "miranda.h"
 
-extern double scale;
 extern int strict;
-extern int debug;
-extern double gap_open;
-extern double gap_extend;
 extern double score_threshold;
 extern double energy_threshold;
 extern int length_5p_for_weighting;
 extern int length_3p_for_weighting;
 extern int key_value_pairs;
-extern int no_energy;
-extern int verbosity;
-extern int truncated;
-extern int restricted;
 
 /* summary of best hits for reporting - for convenient argument passing */
 typedef struct HitSummaryT
@@ -205,7 +154,7 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
             hit->alignment[1], hit->rest[2]);
 
         /*traverse the alignment*/
-        for (j = 0; j < strlen(strict_query_construct); j++) {
+        for (j = 0; j < (int)strlen(strict_query_construct); j++) {
           if (strict_query_construct[j] != '-') {
             /*if no gaps in the miRNA alignment*/
             mypos++;
@@ -234,11 +183,7 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
         }
       }
 
-      if (!no_energy) {
-        energy = get_energy(hit);
-      } else {
-        energy = -1000000;
-      }
+      energy = get_energy(hit);
 
       if (energy < energy_threshold) {
         /* good_call, a good alignment that passes score, energy, etc. */
@@ -257,7 +202,7 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
           }
 
           append_string_ExpString(outjson, delim);
-          printhit(query_length, hit, energy, key_value_pairs, outjson);
+          printhit(query_length, hit, energy, outjson);
           strcpy(delim, ", ");
         }
       }
@@ -284,8 +229,6 @@ char* find_targets(char* gene_seq, char* mirna_seq) {
   int gene_len  = strlen(gene_seq);
   int mirna_len = strlen(mirna_seq);
 
-  int utr_processed = 0;
-  int mirna_processed = 0;
   int i = 0;
 
   hit_struct hit;           // Struct to store hit information
@@ -303,7 +246,6 @@ char* find_targets(char* gene_seq, char* mirna_seq) {
   append_string_ExpString(hit_summary.position_list, "[");
 
   /* Keep track of the number of sequences scanned so far*/
-  utr_processed++;
   length_3p_for_weighting = mirna_len - length_5p_for_weighting;
 
   /* Initialize the hit / alignment constructs for this sequence*/
@@ -369,11 +311,11 @@ char* find_targets(char* gene_seq, char* mirna_seq) {
   if (end_score > 0.0) {
     sprintf(temp,
       "\"digest\": {\"total_score\": %2.2f, \"total_energy\": %2.2f, "
-      "\"max_score\": %2.2f, \"max_energy\": %2.2f, \"strand\": %d, "
+      "\"max_score\": %2.2f, \"max_energy\": %2.2f, "
       "\"mirna_len\": %d, \"gene_len\": %d, \"positions\": %s}",
         hit_summary.total_score,
         end_score, hit_summary.max_score, hit_summary.max_hit,
-        utr_processed, mirna_len, gene_len,
+        mirna_len, gene_len,
         access_ExpString(hit_summary.position_list)
     );
   } else {

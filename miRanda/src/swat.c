@@ -4,42 +4,6 @@
  * using dynamic-programming alignment and thermodynamics
  *
  * Copyright (C) (2003) Memorial Sloan-Kettering Cancer Center, New York
- *
- * Distributed under the GNU Public License (GPL)
- * See the files 'COPYING' and 'LICENSE' for details
- *
- * Authors: Anton Enright, Bino John, Chris Sander and Debora Marks
- * Email: mirnatargets (at) cbio.mskcc.org - reaches all authors
- *
- * Written By: Anton Enright
- *
- * Please send bug reports to: miranda (at) cbio.mskcc.org
- *
- * If you use miRanda in your research please cite:
- * Enright AJ, John B, Gaul U, Tuschl T, Sander C and Marks DS;
- * (2003) Genome Biology; 5(1):R1.
- *
- * This software will be further developed under the open source model,
- * coordinated by Anton Enright and Chris Sander:
- * miranda (at) cbio.mskcc.org (reaches both).
- *
- * Copyright (C) (2003) Memorial Sloan-Kettering Cancer Center
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * -------------------------------------------------------------------
  */
 
 #include <config.h>
@@ -52,19 +16,10 @@
 #include "miranda.h"
 
 extern double scale;
-extern int strict;
-extern int debug;
 extern double gap_open;
 extern double gap_extend;
 extern double score_threshold;
-extern double energy_threshold;
-extern int length_5p_for_weighting;
 extern int length_3p_for_weighting;
-extern int key_value_pairs;
-extern int no_energy;
-extern int verbosity;
-extern int truncated;
-extern int restricted;
 
 /* Master list of Nucleotide Bases*/
 int bases[256];
@@ -140,8 +95,8 @@ void initialize_scores() {
 	char scored_bases[5] = {'C','G','A','U','X'};
 	int i;
 	int j;
-	for (i = 0; i < sizeof(scored_bases) / sizeof(char); i++) {
-		for (j = 0; j < sizeof(scored_bases) / sizeof(char); j++) {
+	for (i = 0; i < (int)(sizeof(scored_bases) / sizeof(char)); i++) {
+		for (j = 0; j < (int)(sizeof(scored_bases) / sizeof(char)); j++) {
 			if (scored_bases[i] == 'X' || scored_bases[j] == 'X') {
 				ali_rep[i][j] = ALIGNMENT_MASKED_REPRESENTATION;
 				ali_score[i][j] = ALIGNMENT_MASKED_SCORE;
@@ -257,8 +212,10 @@ int max_finder_and_track_threestates(int a, int b, int c, int *track) {
 	return max;
 }
 
-void build_matrix(int** best, int*** track, int** a_nt_nt, int** b_gap_nt, int** c_nt_gap, int** nt_nt_score,
-		char* sequence1, char* sequence2, int query_length, int reference_length, score_struct* scores, int *scores_length) {
+void build_matrix(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
+		int** c_nt_gap, int** nt_nt_score, char* sequence1, char* sequence2,
+		int query_length, int reference_length, score_struct* scores,
+		int *scores_length) {
 	int i, j, max, in_seed, open, ext, good_count, tmp_a, tmp_b, tmp_c;
 	good_count = 0;
 
@@ -273,7 +230,8 @@ void build_matrix(int** best, int*** track, int** a_nt_nt, int** b_gap_nt, int**
 			in_seed = 1;
 		}
 		for (j = 1; j <= reference_length; j++) {
-			max = max_finder_and_track_fourstates(a_nt_nt[i-1][j-1], b_gap_nt[i-1][j-1], c_nt_gap[i-1][j-1], &(track[1][i][j]));
+			max = max_finder_and_track_fourstates(a_nt_nt[i-1][j-1],
+					b_gap_nt[i-1][j-1], c_nt_gap[i-1][j-1], &(track[1][i][j]));
 			a_nt_nt[i][j] = max + nt_nt_score[i][j];
 			if (a_nt_nt[i][j] <= 0){
 				a_nt_nt[i][j] = 0;
@@ -302,7 +260,8 @@ void build_matrix(int** best, int*** track, int** a_nt_nt, int** b_gap_nt, int**
 				c_nt_gap[i][j] = -1;
 				track[3][i][j] = 1;
 			}
-			best[i][j] = max_finder_and_track_threestates(a_nt_nt[i][j], b_gap_nt[i][j], c_nt_gap[i][j], &(track[0][i][j]));
+			best[i][j] = max_finder_and_track_threestates(a_nt_nt[i][j],
+					b_gap_nt[i][j], c_nt_gap[i][j], &(track[0][i][j]));
 			if (best[i][j] >= score_threshold) {
 				/* reject alignments ending with an unaligned reference base */
 				if (track[0][i][j] != 2) {
@@ -321,8 +280,8 @@ void build_matrix(int** best, int*** track, int** a_nt_nt, int** b_gap_nt, int**
 
 }
 
-void traceback(int** best, int*** track, char* sequence1, char* sequence2, int i, int j,
-		hit_struct* hit_ptr, double hit_score) {
+void traceback(int** best, int*** track, char* sequence1,
+		char* sequence2, int i, int j, hit_struct* hit_ptr, double hit_score) {
 	int length, track_array;
 	length = 0;
 	hit_ptr->query_end = i;
@@ -334,7 +293,9 @@ void traceback(int** best, int*** track, char* sequence1, char* sequence2, int i
 			length++;
 			hit_ptr->alignment[0][length - 1] = sequence1[i - 1];
 			hit_ptr->alignment[2][length - 1] = sequence2[j - 1];
-			hit_ptr->alignment[1][length - 1] = ali_rep[(int)bases[(int)sequence1[i - 1]]][bases[(int)sequence2[j - 1]]];
+			hit_ptr->alignment[1][length - 1] = ali_rep[(int)bases[
+					(int)sequence1[i - 1]]][bases[(int)sequence2[j - 1]]];
+
 			track_array = track[track_array][i][j];
 			i--;
 			j--;
@@ -369,24 +330,25 @@ int overlap(int start_a, int end_a, int start_b, int end_b) {
 	return min_end - max_start + 1;
 }
 
-int testfor_overlap(int* good_ones_starts_j, int* good_ones_ends_j, int* good_ones_count, int test_start, int test_end) {
+int testfor_overlap(int* good_ones_starts_j, int* good_ones_ends_j,
+		int* good_ones_count, int test_start, int test_end) {
 	int index, good_call;
 	good_call = 1;
+
 	if (*good_ones_count < 0) {
 		good_call = 1;
 		*good_ones_count = *good_ones_count + 1;
 		return good_call;
 	}
+
 	for (index = 0; index <= *good_ones_count; index++) {
-		if (overlap(good_ones_starts_j[index],good_ones_ends_j[index],test_start,test_end) > 6) {
+		if (overlap(good_ones_starts_j[index],
+				good_ones_ends_j[index],test_start,test_end) > 6) {
 			good_call = 0;
 			break;
 		}
 	}
+
 	if (good_call == 1) {*good_ones_count = *good_ones_count + 1;}
-	/*
-	 printf("ref_s ref_e test_s test_e min_end max_start good_call good_ones_count %d %d %d %d %d %d %d %d\n",
-			 ref_start, ref_end, test_start, test_end, min_end, max_start, good_call, *good_ones_count);
-	 */
 	return good_call;
 }

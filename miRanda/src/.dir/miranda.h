@@ -99,6 +99,6 @@ void clear_hit(hit_struct*, int, int);
 int cmpscores(const void*, const void*);
 void string_toupper(char*);
 /*   in output.c */
-void printhit(int, hit_struct*, double, int, ExpString*);
+void printhit(int, hit_struct*, double, ExpString*);
 /*   in thermo.c */
 double get_energy(hit_struct*);
