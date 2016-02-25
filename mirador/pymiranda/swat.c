@@ -1,11 +1,12 @@
-/* swat.c */
-/* -------------------------------------------------------------------
- * miRanda- An miRNA target scanner, aims to predict mRNA targets for microRNAs,
- * using dynamic-programming alignment and thermodynamics
+/**
+ * Adapted from miRanda.
  *
+ * Refactored by: Prashant Sinha (prashant@ducic.ac.in) on 24 Feb 2016
+ *
+ * Original Authors: Anton Enright, Bino John, Chris Sander and Debora Marks
  * Copyright (C) (2003) Memorial Sloan-Kettering Cancer Center, New York
+ * Distributed under the GNU Public License (GPL)
  */
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -130,7 +131,8 @@ int score5p(char nt1, char nt2) {
 	return ali_score5p[bases[(int)nt1]][bases[(int)nt2]];
 }
 
-void get_nt_nt_seq_scores(int** nt_nt_scores, char* sequence1, char* sequence2, int query_length, int reference_length) {
+void get_nt_nt_seq_scores(int** nt_nt_scores, char* sequence1, char* sequence2,
+			int query_length, int reference_length) {
 	int i, j;
 	if (query_length <= 3) {
 		/* all positions have 0 nt-nt score */
@@ -142,8 +144,11 @@ void get_nt_nt_seq_scores(int** nt_nt_scores, char* sequence1, char* sequence2, 
 		return;
 	}
 	for (j = 1; j <= reference_length; j++) {
-		nt_nt_scores[1][j] = 0;	/* scores of positions 1, n-1 and n in the miRNA are scored as 0*/
-		nt_nt_scores[2][j] = 0; /* note that the miRNA is reversed in sequence1, so this is positions 1 2 and n*/
+		/* scores of positions 1, n-1 and n in the miRNA are scored as 0*/
+		nt_nt_scores[1][j] = 0;
+		/* note that the miRNA is reversed in sequence1,
+			 so this is positions 1 2 and n*/
+		nt_nt_scores[2][j] = 0;
 		nt_nt_scores[query_length][j] = 0;
 	}
 	for (i = 3; i <= query_length - 1; i++) {
@@ -157,15 +162,18 @@ void get_nt_nt_seq_scores(int** nt_nt_scores, char* sequence1, char* sequence2, 
 	}
 }
 
-void nullify_overlaps(int total_elements, score_struct* scores, int overlap_limit, int *scores_length) {
+void nullify_overlaps(int total_elements, score_struct* scores,
+		int overlap_limit, int *scores_length) {
 	int index;
 	int outer_ref_end;
 	int inner_index;
 	for (index = 0; index <= total_elements; index++) {
 		if (scores[index].score == 0) {continue;}
 		(*scores_length)++;
-		/* use query end to figure where ref offset relative to fictional query offset 0 would be */
-		outer_ref_end = scores[index].reference_trace_end - scores[index].query_trace_end;
+		/* use query end to figure where ref offset relative to
+			 fictional query offset 0 would be */
+		outer_ref_end = (scores[index].reference_trace_end -
+				scores[index].query_trace_end);
 		for (inner_index = total_elements; inner_index > index; inner_index--) {
 			int inner_ref_end = scores[inner_index].reference_trace_end -
 					scores[inner_index].query_trace_end;

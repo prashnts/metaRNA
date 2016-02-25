@@ -1,3 +1,12 @@
+/**
+ * Adapted from miRanda.
+ *
+ * Refactored by: Prashant Sinha (prashant@ducic.ac.in) on 24 Feb 2016
+ *
+ * Original Authors: Anton Enright, Bino John, Chris Sander and Debora Marks
+ * Copyright (C) (2003) Memorial Sloan-Kettering Cancer Center, New York
+ * Distributed under the GNU Public License (GPL)
+ */
 
 #include <stdio.h>
 #include <stdlib.h>

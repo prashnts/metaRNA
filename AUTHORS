@@ -1,5 +1,7 @@
-miRanda code written by Anton Enright
 
+miRador ported from miRanda by Prashant Sinha (prashant@ducic.ac.in)
+
+miRanda code written by Anton Enright
 miRanda was designed by:
 Anton Enright
 Chris Sander
@@ -9,7 +11,5 @@ and Bino John
 Contact (All Authors): mirnatargets (at) cbio.mskcc.org
 
 The RNAlib library to which miRanda links is part of the Vienna
-package, and was written by Ivo Hofacker. Please see: 
+package, and was written by Ivo Hofacker. Please see:
 libRNA/AUTHORS and libRNA/COPYING for more information.
-
-See THANKS for names of other people who contributed.

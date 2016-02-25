@@ -1,3 +1,12 @@
+/**
+ * Adapted from miRanda.
+ *
+ * Refactored by: Prashant Sinha (prashant@ducic.ac.in) on 24 Feb 2016
+ *
+ * Original Authors: Anton Enright, Bino John, Chris Sander and Debora Marks
+ * Copyright (C) (2003) Memorial Sloan-Kettering Cancer Center, New York
+ * Distributed under the GNU Public License (GPL)
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +26,7 @@ struct ExpStringT {
 
 void create_ExpString(ExpString **es) {
 	if (*es != 0) {
-		fprintf(stderr,"Error: ExpString created on non-null pointer (overwrite/memory leak)\n");
+		fprintf(stderr, "Error: ExpString created on non-null pointer\n");
 		exit(1);
 	}
 	*es = malloc(sizeof(ExpString));
@@ -53,8 +62,11 @@ int length_ExpString(ExpString *es) {
 
 void append_char_ExpString(ExpString *es, char c) {
 	int start_capacity = es->char_capacity;
-	if ((int)((es->bottom - es->top + 1) / sizeof(char) + sizeof(char)) > es->char_capacity) {
-		es->char_capacity = (es->char_capacity * ExpString_GROW_NUMERATOR) / ExpString_GROW_DENOMINATOR;
+	int cap = (int)((es->bottom - es->top + 1) / sizeof(char) + sizeof(char));
+	if (cap > es->char_capacity) {
+		es->char_capacity = ((es->char_capacity * ExpString_GROW_NUMERATOR) /
+				ExpString_GROW_DENOMINATOR);
+
 		es->top = realloc(es->top,es->char_capacity * sizeof(char));
 		if (es->top == 0) {
 			fprintf(stderr,"Error: memory allocation failed\n");
