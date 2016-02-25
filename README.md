@@ -2,14 +2,42 @@
 
 miRador finds potential target sites for the microRNAs in genomic sequences. It is built on miRanda, an algorithm for detection and ranking of the targets of microRNA.
 
-[![Build Status](https://travis-ci.org/PrashntS/pancake.svg?branch=master)](https://travis-ci.org/PrashntS/pancake)
+[![Build Status](https://travis-ci.org/PrashntS/miRador.svg?branch=master)](https://travis-ci.org/PrashntS/miRador)
 [![PyPi Status](https://img.shields.io/badge/pypi-4.0-orange.svg)](#)
 [![Python Versions](https://img.shields.io/badge/python-2.7%2C%203.3%2C%203.4%2C%203.4-blue.svg)](#)
 [![License](https://img.shields.io/badge/license-GPLv3-green.svg)](#)
 
-## Usage
+## Quickstart
+
+```python
+from mirador.target_scan import scan, free_energy
+
+gene_sequence = (
+    "ACAAGATGCCATTGTCCCCCGGCCTCCTGCTGCTGCTGCTCTCCGGGGCCACGGCCACCGCTGCCCTGCC"
+    "CCTGGAGGGTGGCCCCACCGGCCGAGACAGCGAGCATATGCAGGAAGCGGCAGGAATAAGGAAAAGCAGC"
+    "CTCCTGACTTTCCTCGCTTGGTGGTTTGAGTGGACCTCCCAGGCCAGTGCCGGGCCCCTCATAGGAGAGG"
+)
+
+mirna_sequence = "UGGCGAUUUUGGAACUCAAUGGCA"
+
+# Get free Energy value:
+delta_g = free_energy(gene_sequence, mirna_sequence)
+
+# Get full targets information:
+targets = scan(gene_sequence, mirna_sequence)
+
+```
 
 ## Installation
+
+miRador supports Python versions 2.7, 3.3, 3.4, and 3.5. It requires the Vienna RNA package which must be installed before installing miRador.
+
+After Intalling Vienna RNA package, miRador may be installed simply by executing:
+```shell
+$ pip install mirador
+```
+
+miRador is currently tested on Mac OSX and Ubuntu, however other Unix based systems should be supported. It isn't tested on Windows yet.
 
 ## Description
 
