@@ -1,0 +1,18 @@
+language: python
+python:
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.5-dev" # 3.5 development branch
+before_install:
+  - sudo apt-add-repository ppa:j-4/vienna-rna
+  - sudo apt-get update
+  - sudo apt-get install vienna-rna
+script: "python miRanda/setup.py install"
+# command to run tests
+# script: "python -m unittest discover -s tests/"
+notifications:
+  email:
+    recipients: prashant@ducic.ac.in
+    on_success: change
+    on_failure: change
