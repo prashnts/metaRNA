@@ -11,7 +11,9 @@ before_install:
   - ./configure --without-perl --without-python
   - make
   - sudo make install
-script: "python miRanda/setup.py install"
+script:
+  - cd $TRAVIS_BUILD_DIR
+  - python miRanda/setup.py install
 # command to run tests
 # script: "python -m unittest discover -s tests/"
 notifications:
