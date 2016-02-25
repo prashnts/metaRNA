@@ -5,9 +5,12 @@ python:
   - "3.5"
   - "3.5-dev" # 3.5 development branch
 before_install:
-  - sudo apt-add-repository ppa:j-4/vienna-rna
-  - sudo apt-get update
-  - sudo apt-get install vienna-rna
+  - wget http://www.tbi.univie.ac.at/RNA/download/package=viennarna-src-tbi&flavor=sourcecode&dist=2_2_x&arch=src&version=2.2.4
+  - tar -zxvf ViennaRNA-2.2.4.tar.gz
+  - cd ViennaRNA-2.2.4
+  - ./configure
+  - make
+  - sudo make install
 script: "python miRanda/setup.py install"
 # command to run tests
 # script: "python -m unittest discover -s tests/"
