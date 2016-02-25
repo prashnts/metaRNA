@@ -13,6 +13,7 @@ extern double energy_threshold;
 extern int length_5p_for_weighting;
 extern int length_3p_for_weighting;
 extern int key_value_pairs;
+extern int alignment_len_threshold;
 
 /* summary of best hits for reporting - for convenient argument passing */
 typedef struct HitSummaryT
@@ -185,7 +186,9 @@ double do_alignment(int** best, int*** track, int** a_nt_nt, int** b_gap_nt,
 
       energy = get_energy(hit);
 
-      if (energy < energy_threshold) {
+      int alignment_length = strlen(hit->alignment[0]);
+
+      if (alignment_length >= alignment_len_threshold) {
         /* good_call, a good alignment that passes score, energy, etc. */
         if (good_call) {
           scan_score += (energy * -1);
@@ -325,6 +328,37 @@ void find_targets(char* gene_seq, char* mirna_seq, ExpString* outjson) {
   append_string_ExpString(outjson, temp);
   append_string_ExpString(outjson, "}");
   free(temp);
+
+  for (i = mirna_len; i >= 0; i--) {
+    free(nt_nt_score[i]);
+    free(c_nt_gap[i]);
+    free(b_gap_nt[i]);
+    free(a_nt_nt[i]);
+    free(track[3][i]);
+    free(track[2][i]);
+    free(track[1][i]);
+    free(track[0][i]);
+    free(best[i]);
+  }
+  for (i = 3; i >= 0; i--) {
+    free(track[i]);
+  }
+  free(nt_nt_score);
+  free(c_nt_gap);
+  free(b_gap_nt);
+  free(a_nt_nt);
+  free(track);
+  free(best);
+  free(scores);
+  free(hit.rest[5]);
+  free(hit.rest[4]);
+  free(hit.rest[3]);
+  free(hit.rest[2]);
+  free(hit.rest[1]);
+  free(hit.rest[0]);
+  free(hit.alignment[2]);
+  free(hit.alignment[1]);
+  free(hit.alignment[0]);
 
   destroy_ExpString(&(hit_summary.position_list));
 }

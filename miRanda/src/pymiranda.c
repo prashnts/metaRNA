@@ -11,9 +11,10 @@ int strict = 0;
 double gap_open = -9.0;
 int temperature_override = 25;
 double gap_extend = -4.0;
-double score_threshold = 100.0;
+double score_threshold = 10.0;
 double energy_threshold = 1.0;
 int length_5p_for_weighting = 8;
+int alignment_len_threshold = 6;
 int length_3p_for_weighting;
 
 static PyObject* libpymiranda_find_targets(PyObject *self,
@@ -27,14 +28,15 @@ static PyObject* libpymiranda_find_targets(PyObject *self,
 
   static char *kwlist[] = {"gene_seq", "mirna_seq", "scale", "strict",
     "gap_open", "gap_extend", "score_threshold", "energy_threshold",
-    "length_5p_for_weighting", "temperature", NULL};
+    "length_5p_for_weighting", "temperature", "alignment_len_threshold",
+    NULL};
 
   int parsed = PyArg_ParseTupleAndKeywords(args, keywds,
-    "ss|diddddii",
+    "ss|diddddiii",
     kwlist,
     &gene_seq, &mirna_seq, &scale, &strict, &gap_open, &gap_extend,
     &score_threshold, &energy_threshold, &length_5p_for_weighting,
-    &temperature_override
+    &temperature_override, &alignment_len_threshold
   );
 
   if (gene_seq == NULL || mirna_seq == NULL) {
@@ -46,7 +48,6 @@ static PyObject* libpymiranda_find_targets(PyObject *self,
   find_targets(gene_seq, mirna_seq, outjson);
 
   PyObject* ret_val = Py_BuildValue("s", access_ExpString(outjson));
-
   destroy_ExpString(&outjson);
 
   if (parsed) {
