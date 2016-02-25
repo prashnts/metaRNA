@@ -1,8 +1,11 @@
 # miRador
 
-[![Build Status](https://travis-ci.org/PrashntS/pancake.svg?branch=master)](https://travis-ci.org/PrashntS/pancake)
-
 miRador finds potential target sites for the microRNAs in genomic sequences. It is built on miRanda, an algorithm for detection and ranking of the targets of microRNA.
+
+[![Build Status](https://travis-ci.org/PrashntS/pancake.svg?branch=master)](https://travis-ci.org/PrashntS/pancake)
+[![PyPi Status](https://img.shields.io/badge/pypi-4.0-orange.svg)](#)
+[![Python Versions](https://img.shields.io/badge/python-2.7%2C%203.3%2C%203.4%2C%203.4-blue.svg)](#)
+[![License](https://img.shields.io/badge/license-GPLv3-green.svg)](#)
 
 ## Usage
 
