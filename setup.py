@@ -1,7 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#.--. .-. ... .... -. - ... .-.-.- .. -.
+
 import sys
 import os
 
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 def check_rna_lib_installed(**kwa):
   "Check Vienna RNA Packages"
