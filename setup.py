@@ -24,20 +24,20 @@ def get_rna_lib_intallation_path():
 
 def check_sanity():
   """
-  Check Sanity of the System. Since miRador core depends on C extension,
+  Check Sanity of the System. Since metaRNA core depends on C extension,
   only posix systems are supported at the moment.
   """
 
   if not os.name == 'posix':
-    print("miRador is currently not tested on non-posix systems.")
+    print("metaRNA is currently not tested on non-posix systems.")
 
   if sys.version_info[:2] not in [(2, 7), (3, 3), (3, 4), (3, 5)]:
-    print("miRador is only supported on Python 2.7, 3.3, 3.4, 3.5.")
+    print("metaRNA is only supported on Python 2.7, 3.3, 3.4, 3.5.")
     return False
 
   if not check_rna_lib_installed(**get_rna_lib_intallation_path()):
     print(
-      "miRador requires Vienna RNA package. Please read the docs "
+      "metaRNA requires Vienna RNA package. Please read the docs "
       "for installation instructions.\n"
       "If you have Vienna Package, then perhaps the installer is "
       "unable to find the location. The location may be set by "
@@ -53,13 +53,13 @@ if not check_sanity():
 def extension_args():
   args = get_rna_lib_intallation_path()
   args['sources'] = [
-    'mirador/pymiranda/pymiranda.c',
-    'mirador/pymiranda/scan.c',
-    'mirador/pymiranda/swat.c',
-    'mirador/pymiranda/thermo.c',
-    'mirador/pymiranda/utils.c',
-    'mirador/pymiranda/output.c',
-    'mirador/pymiranda/ExpString.c',
+    'metarna/pymiranda/pymiranda.c',
+    'metarna/pymiranda/scan.c',
+    'metarna/pymiranda/swat.c',
+    'metarna/pymiranda/thermo.c',
+    'metarna/pymiranda/utils.c',
+    'metarna/pymiranda/output.c',
+    'metarna/pymiranda/ExpString.c',
   ]
   args['libraries'] = [
     'RNA',
@@ -68,17 +68,17 @@ def extension_args():
   return args
 
 setup_args = {
-  'name': 'mirador',
-  'version': '4.0',
+  'name': 'metarna',
+  'version': '4.0.0',
   'description': 'This is a demo package',
   'author': 'Prashant Sinha',
   'author_email': 'prashant@ducic.ac.in',
-  'url': 'https://github.com/prashnts/mirador',
+  'url': 'https://github.com/prashnts/metarna',
   'license': 'GPLv3',
   'description': 'Finds target sites for the miRNAs in genomic sequences.',
-  'packages': ['mirador'],
+  'packages': ['metarna'],
   'ext_modules': [
-    Extension('mirador.pymiranda', **extension_args()),
+    Extension('metarna.pymiranda', **extension_args()),
   ],
   'classifiers': [
     'Development Status :: 4 - Beta',

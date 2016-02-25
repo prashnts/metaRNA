@@ -3,7 +3,7 @@
 #.--. .-. ... .... -. - ... .-.-.- .. -.
 
 import json
-from mirador.pymiranda import find_targets
+from metarna.pymiranda import find_targets
 
 def scan(target_sequence, mirna_sequence, **kwa):
   """
@@ -36,7 +36,7 @@ def free_energy(target_sequence, mirna_sequence, **kwa):
   """
   Shortcut to find the Maximum Free energy in the given pair.
 
-  See miRador.pymiranda.target_scan.scan for details on the arguments.
+  See metarna.pymiranda.target_scan.scan for details on the arguments.
 
   Return (float): The free energy value.
   """
