@@ -15,7 +15,7 @@ before_install:
 script:
   - cd $TRAVIS_BUILD_DIR
   - python setup.py develop
-  - python -m unittest
+  - python -m unittest discover
 notifications:
   email:
     recipients: prashant@ducic.ac.in
