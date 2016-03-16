@@ -3,9 +3,12 @@
 metaRNA finds potential target sites for the microRNAs in genomic sequences. It is built on miRanda, an algorithm for detection and ranking of the targets of microRNA.
 
 [![Build Status](https://travis-ci.org/PrashntS/metaRNA.svg?branch=master)](https://travis-ci.org/PrashntS/metaRNA)
-[![PyPi Status](https://img.shields.io/badge/pypi-4.0-orange.svg)](#)
-[![Python Versions](https://img.shields.io/badge/python-2.7%2C%203.3%2C%203.4%2C%203.4-blue.svg)](#)
-[![License](https://img.shields.io/badge/license-GPLv3-green.svg)](#)
+[![PyPI](https://img.shields.io/pypi/v/metarna.svg)](https://pypi.python.org/pypi/metarna)
+[![PyPI](https://img.shields.io/pypi/dw/metarna.svg)](https://pypi.python.org/pypi/metarna)
+[![PyPI](https://img.shields.io/pypi/pyversions/metarna.svg)](https://pypi.python.org/pypi/metarna)
+[![PyPI](https://img.shields.io/pypi/l/metarna.svg)]()
+[![](https://img.shields.io/github/issues-raw/prashnts/metarna.svg)](https://github.com/PrashntS/metaRNA/issues)
+[![PyPI](https://img.shields.io/pypi/status/metarna.svg)]()
 
 ## Quickstart
 
@@ -38,6 +41,15 @@ $ pip install metarna
 ```
 
 metaRNA is currently tested on Mac OSX and Ubuntu, however other Unix based systems should be supported. It isn't tested on Windows yet.
+
+## Running tests
+
+Use of `virtualenv` is assumed and expected.
+
+```shell
+$ python setup.py develop # Installs Development Version
+$ python -m unittest
+```
 
 ## Description
 

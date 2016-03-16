@@ -14,9 +14,8 @@ before_install:
   - sudo make install
 script:
   - cd $TRAVIS_BUILD_DIR
-  - python setup.py install
-# command to run tests
-# script: "python -m unittest discover -s tests/"
+  - python setup.py develop
+  - python -m unittest
 notifications:
   email:
     recipients: prashant@ducic.ac.in
