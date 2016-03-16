@@ -66,6 +66,7 @@ def extension_args():
     'm'
   ]
   args['extra_compile_args'] = ['-fopenmp']
+  args['extra_link_args'] = ['-lgomp']
   return args
 
 setup_args = {
