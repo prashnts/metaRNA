@@ -65,6 +65,7 @@ def extension_args():
     'RNA',
     'm'
   ]
+  args['extra_compile_args'] = ['-fopenmp']
   return args
 
 setup_args = {
