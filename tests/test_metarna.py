@@ -15,4 +15,8 @@ class TestTargetScan(unittest.TestCase):
 
   def test_default(self):
     delta_g = free_energy(self.gene_seq, self.mirna_seq)
-    self.assertEqual(delta_g, -14.76)
+    self.assertEqual(delta_g, -13.08)
+
+  def test_report(self):
+    scan_res = scan(self.gene_seq, self.mirna_seq)
+    pass

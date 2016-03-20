@@ -42,6 +42,7 @@ def free_energy(target_sequence, mirna_sequence, **kwa):
   """
   try:
     doc = scan(target_sequence, mirna_sequence, **kwa)
-    return doc['digest']['max_energy']
+    dat = max(doc.get('hits', []), key= lambda x: x['score'])
+    return dat['energy']
   except KeyError:
     raise ValueError("No targets found.")
