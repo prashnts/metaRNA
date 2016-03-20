@@ -74,7 +74,7 @@ def extension_args():
 
 setup_args = {
   'name': 'metarna',
-  'version': '4.0.3',
+  'version': '4.0.4',
   'author': 'Prashant Sinha',
   'author_email': 'prashant@ducic.ac.in',
   'url': 'https://github.com/prashnts/metarna',
