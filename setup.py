@@ -53,6 +53,7 @@ if not check_sanity():
 def extension_args():
   args = get_rna_lib_intallation_path()
   args['sources'] = [
+    'metarna/pymiranda/miranda.h',
     'metarna/pymiranda/pymiranda.c',
     'metarna/pymiranda/scan.c',
     'metarna/pymiranda/swat.c',
@@ -71,7 +72,7 @@ def extension_args():
 
 setup_args = {
   'name': 'metarna',
-  'version': '4.0.1',
+  'version': '4.0.3',
   'author': 'Prashant Sinha',
   'author_email': 'prashant@ducic.ac.in',
   'url': 'https://github.com/prashnts/metarna',
