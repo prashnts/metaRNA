@@ -52,8 +52,10 @@ if not check_sanity():
 
 def extension_args():
   args = get_rna_lib_intallation_path()
-  args['sources'] = [
+  args['depends'] = [
     'metarna/pymiranda/miranda.h',
+  ]
+  args['sources'] = [
     'metarna/pymiranda/pymiranda.c',
     'metarna/pymiranda/scan.c',
     'metarna/pymiranda/swat.c',
