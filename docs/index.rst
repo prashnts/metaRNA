@@ -3,14 +3,49 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to metaRNA's documentation!
-===================================
+metaRNA, find target sites for the miRNAs
+=========================================
 
-Contents:
+metaRNA finds potential target sites for the microRNAs in genomic
+sequences.
+
+* Written in Python
+* Built on miRanda_.
+
+It is built on miRanda, an algorithm for detection and
+ranking of the targets of microRNA.
+
+.. _miRanda: http://www.microrna.org/microrna/getDownloads.do
+
+Quickstart
+----------
+
+.. code:: python
+
+    from metarna.target_scan import scan, free_energy
+
+    gene_sequence = (
+        "ACAAGATGCCATTGTCCCCCGGCCTCCTGCTGCTGCTGCTCTCCGGGGCCACGGCCACCGCTGCCCTGCC"
+        "CCTGGAGGGTGGCCCCACCGGCCGAGACAGCGAGCATATGCAGGAAGCGGCAGGAATAAGGAAAAGCAGC"
+        "CTCCTGACTTTCCTCGCTTGGTGGTTTGAGTGGACCTCCCAGGCCAGTGCCGGGCCCCTCATAGGAGAGG"
+    )
+
+    mirna_sequence = "UGGCGAUUUUGGAACUCAAUGGCA"
+
+    # Get free Energy value:
+    delta_g = free_energy(gene_sequence, mirna_sequence)
+
+    # Get full targets information:
+    targets = scan(gene_sequence, mirna_sequence)
+
+
+Contents
 
 .. toctree::
    :maxdepth: 2
 
+   installation
+   getting-started
 
 
 Indices and tables
