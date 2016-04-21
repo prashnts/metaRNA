@@ -1,0 +1,13 @@
+# Change Log
+metaRNA is built over miRanda and provides Python Consumable APIs.
+This project uses [Semantic Versioning](http://semver.org/).
+
+## [Unreleased]
+### Added
+- Documentation
+
+## [4.0.4] - 2016-02-25
+### Fixed
+- Build failure on Ubuntu systems
+
+## [4.0.3] - 2016-02-25 [YANKED]
