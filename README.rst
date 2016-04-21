@@ -5,13 +5,7 @@ metaRNA finds potential target sites for the microRNAs in genomic
 sequences. It is built on miRanda, an algorithm for detection and
 ranking of the targets of microRNA.
 
-| |Build Status|
-| |PyPI|
-| |PyPI|
-| |PyPI|
-| |PyPI|
-| |image5|
-| |PyPI|
+|Build Status| |PyPI V| |PyPI DW| |PyPI VER| |PyPI L| |image5| |PyPI S|
 
 Quickstart
 ----------
@@ -88,15 +82,15 @@ citations can be obtained from the links above.
 
 .. |Build Status| image:: https://travis-ci.org/PrashntS/metaRNA.svg?branch=master
    :target: https://travis-ci.org/PrashntS/metaRNA
-.. |PyPI| image:: https://img.shields.io/pypi/v/metarna.svg
+.. |PyPI V| image:: https://img.shields.io/pypi/v/metarna.svg
    :target: https://pypi.python.org/pypi/metarna
-.. |PyPI| image:: https://img.shields.io/pypi/dw/metarna.svg
+.. |PyPI DW| image:: https://img.shields.io/pypi/dw/metarna.svg
    :target: https://pypi.python.org/pypi/metarna
-.. |PyPI| image:: https://img.shields.io/pypi/pyversions/metarna.svg
+.. |PyPI VER| image:: https://img.shields.io/pypi/pyversions/metarna.svg
    :target: https://pypi.python.org/pypi/metarna
-.. |PyPI| image:: https://img.shields.io/pypi/l/metarna.svg
-   :target:
+.. |PyPI L| image:: https://img.shields.io/pypi/l/metarna.svg
+   :target: #
 .. |image5| image:: https://img.shields.io/github/issues-raw/prashnts/metarna.svg
    :target: https://github.com/PrashntS/metaRNA/issues
-.. |PyPI| image:: https://img.shields.io/pypi/status/metarna.svg
-   :target:
+.. |PyPI S| image:: https://img.shields.io/pypi/status/metarna.svg
+   :target: #
