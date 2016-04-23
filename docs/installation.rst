@@ -42,8 +42,8 @@ On Unix-like systems, it usually involves:
 .. code-block:: bash
 
     wget "http://www.tbi.univie.ac.at/RNA/download/package=viennarna-src-tbi&flavor=sourcecode&dist=2_2_x&arch=src&version=2.2.4" -O viennaRNA.tar.gz
-    tar -zxvf ViennaRNA-2.2.5.tar.gz
-    cd ViennaRNA-2.2.5
+    tar -zxvf viennaRNA.tar.gz
+    cd ViennaRNA-2.2.4
     ./configure
     make
     sudo make install
