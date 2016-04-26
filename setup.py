@@ -4,6 +4,7 @@
 
 import sys
 import os
+import platform
 
 from setuptools import setup, Extension
 
@@ -68,8 +69,9 @@ def extension_args():
     'RNA',
     'm'
   ]
-  args['extra_compile_args'] = ['-fopenmp']
-  args['extra_link_args'] = ['-lgomp']
+  if not platform.system() == 'Darwin':
+    args['extra_compile_args'] = ['-fopenmp']
+    args['extra_link_args'] = ['-lgomp']
   return args
 
 setup_args = {
