@@ -28,6 +28,12 @@ Quickstart
     # Get full targets information:
     targets = scan(gene_sequence, mirna_sequence)
 
+
+Documentation
+-------------
+
+Latest metaRNA documentation is available on `ReadTheDocs <http://metarna.readthedocs.io/en/latest/>`_.
+
 Installation
 ------------
 
