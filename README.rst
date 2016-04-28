@@ -28,6 +28,10 @@ Quickstart
     # Get full targets information:
     targets = scan(gene_sequence, mirna_sequence)
 
+    # Specifying Calculation Parameters
+    targets = scan(gene_sequence, mirna_sequence, scale=5.0)
+    # Check the docs for all available options
+
 
 Documentation
 -------------
