@@ -1,2 +1,0 @@
--e git+git@github.com:PrashntS/metaRNA.git@4579827cc41a5f03f65af41441a72b72aab6eb93#egg=metarna-master
-wheel==0.24.0
