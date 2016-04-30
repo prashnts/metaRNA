@@ -1,14 +1,15 @@
 language: python
 os:
   - linux
-  - osx
+# - osx
 python:
   - "2.7"
   - "3.3"
   - "3.4"
   - "3.5"
 before_install:
-  - wget "https://0xc0d3.pw/etc/vienna224.zip" -O vienna224.zip
+  - wget "http://0xc0d3.pw/etc/vienna224.zip" -O vienna224.zip
+  - echo "82f1ac89107218004189e4c79ad4cbc16a5255b9  vienna224.zip" | shasum -c
   - tar -xvf vienna224.zip
   - cd vienna224
   - ./configure --without-perl --without-python
