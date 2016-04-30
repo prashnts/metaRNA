@@ -7,11 +7,10 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
-  - "3.5-dev" # 3.5 development branch
 before_install:
-  - wget "http://www.tbi.univie.ac.at/RNA/download/package=viennarna-src-tbi&flavor=sourcecode&dist=2_2_x&arch=src&version=2.2.4" -O viennaRNA.tar.gz
-  - tar -zxvf viennaRNA.tar.gz
-  - cd ViennaRNA-2.2.4
+  - wget "https://0xc0d3.pw/etc/vienna224.zip" -O vienna224.zip
+  - tar -xvf vienna224.zip
+  - cd vienna224
   - ./configure --without-perl --without-python
   - make
   - sudo make install
