@@ -3,6 +3,7 @@
 # metaRNA
 
 from metarna.target_scan import scan, free_energy
+from metarna.report import get_report
 
 gene_sequence = (
     "ACAAGATGCCATTGTCCCCCGGCCTCCTGCTGCTGCTGCTCTCCGGGGCCACGGCCACCGCTGCCCTGCC"
@@ -17,3 +18,5 @@ delta_g = free_energy(gene_sequence, mirna_sequence)
 
 # Get full targets information:
 targets = scan(gene_sequence, mirna_sequence)
+
+print(get_report(targets))

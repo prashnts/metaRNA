@@ -16,3 +16,22 @@ Expected Render:
   -------acaagatgccATTGTCc
 '''
 
+HIT_TEMPLATE = '''
+
+  ΔG    {energy}
+
+  {query_end}
+   {aln_mirna}
+   {aln_map}
+   {aln_utr}
+  {ref_end}   {ref_start}
+
+'''
+
+def get_report(targets):
+  hits = targets.get('hits', [])
+  hits.sort(key=lambda x: x['score'], reverse=True)
+  out = ""
+  for hit in hits:
+    out += HIT_TEMPLATE.format(**hit)
+  return out
