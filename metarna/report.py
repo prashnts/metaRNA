@@ -20,11 +20,11 @@ HIT_TEMPLATE = '''
 
   ΔG    {energy}
 
-  {query_end}
-   {aln_mirna}
-   {aln_map}
-   {aln_utr}
-  {ref_end}   {ref_start}
+{query_end:>6}
+     {aln_mirna}
+     {aln_map}
+     {aln_utr}
+{ref_end:>6}   {ref_start}
 
 '''
 
