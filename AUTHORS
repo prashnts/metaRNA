@@ -1,5 +1,5 @@
 
-miRador ported from miRanda by Prashant Sinha (prashant@ducic.ac.in)
+metaRNA and pymiRanda ported from miRanda by Prashant Sinha
 
 miRanda code written by Anton Enright
 miRanda was designed by:
@@ -8,7 +8,8 @@ Chris Sander
 Debora Marks
 and Bino John
 
-Contact (All Authors): mirnatargets (at) cbio.mskcc.org
+Contact (miRanda Authors): mirnatargets (at) cbio.mskcc.org
+Contact (metaRNA Author): prashant (at) ducic.ac.in
 
 The RNAlib library to which miRanda links is part of the Vienna
 package, and was written by Ivo Hofacker. Please see:

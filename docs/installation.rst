@@ -50,6 +50,15 @@ On Unix-like systems, it usually involves:
 
 Usual build essentials (``automake``, ``autoconf``, ``gcc``) are required.
 
+You can download the above package from `this link <https://noop.pw/etc/vienna224.tar.gz>`_
+if the above link isn't accessible. To download and verify the SHA checksum:
+
+.. code-block:: bash
+
+    wget "https://noop.pw/etc/vienna224.tar.gz" -O vienna224.tar.gz
+    echo "71a4c4704228fd01eb6e39415400a904d5240cef  vienna224.tar.gz" | shasum -c
+
+
 Windows System
 --------------
 

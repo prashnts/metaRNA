@@ -5,6 +5,8 @@ This project uses [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Documentation
+### Changed
+- (dev) Updated fetch url in .travis.yml
 
 ## [4.0.4] - 2016-02-25
 ### Fixed

@@ -5,7 +5,7 @@ metaRNA finds potential target sites for the microRNAs in genomic
 sequences. It is built on miRanda, an algorithm for detection and
 ranking of the targets of microRNA.
 
-|Build Status| |PyPI V| |PyPI DW| |PyPI VER| |PyPI L| |image5| |PyPI S|
+|Build Status| |PyPI V| |PyPI DM| |PyPI VER| |PyPI L| |image5| |PyPI S|
 
 Quickstart
 ----------
@@ -94,7 +94,7 @@ citations can be obtained from the links above.
    :target: https://travis-ci.org/PrashntS/metaRNA
 .. |PyPI V| image:: https://img.shields.io/pypi/v/metarna.svg
    :target: https://pypi.python.org/pypi/metarna
-.. |PyPI DW| image:: https://img.shields.io/pypi/dw/metarna.svg
+.. |PyPI DM| image:: https://img.shields.io/pypi/dm/metarna.svg
    :target: https://pypi.python.org/pypi/metarna
 .. |PyPI VER| image:: https://img.shields.io/pypi/pyversions/metarna.svg
    :target: https://pypi.python.org/pypi/metarna
