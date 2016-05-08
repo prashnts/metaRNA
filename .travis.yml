@@ -8,7 +8,7 @@ python:
   - "3.4"
   - "3.5"
 before_install:
-  - wget "http://0xc0d3.pw/etc/vienna224.tar.gz" -O vienna224.tar.gz
+  - wget "http://noop.pw/etc/vienna224.tar.gz" -O vienna224.tar.gz
   - echo "71a4c4704228fd01eb6e39415400a904d5240cef  vienna224.tar.gz" | shasum -c
   - tar -zxvf vienna224.tar.gz
   - cd vienna224
