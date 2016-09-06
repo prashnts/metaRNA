@@ -90,8 +90,8 @@ citations can be obtained from the links above.
 .. _user manual: http://cbio.mskcc.org/microrna_data/manual.html
 .. _Vienna RNA: http://www.tbi.univie.ac.at/RNA/
 
-.. |Build Status| image:: https://travis-ci.org/PrashntS/metaRNA.svg?branch=master
-   :target: https://travis-ci.org/PrashntS/metaRNA
+.. |Build Status| image:: https://travis-ci.org/prashnts/metaRNA.svg?branch=master
+   :target: https://travis-ci.org/prashnts/metaRNA
 .. |PyPI V| image:: https://img.shields.io/pypi/v/metarna.svg
    :target: https://pypi.python.org/pypi/metarna
 .. |PyPI DM| image:: https://img.shields.io/pypi/dm/metarna.svg
@@ -101,6 +101,6 @@ citations can be obtained from the links above.
 .. |PyPI L| image:: https://img.shields.io/pypi/l/metarna.svg
    :target: #
 .. |image5| image:: https://img.shields.io/github/issues-raw/prashnts/metarna.svg
-   :target: https://github.com/PrashntS/metaRNA/issues
+   :target: https://github.com/prashnts/metaRNA/issues
 .. |PyPI S| image:: https://img.shields.io/pypi/status/metarna.svg
    :target: #
