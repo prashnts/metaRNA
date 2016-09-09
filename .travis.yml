@@ -8,10 +8,10 @@ python:
   - "3.4"
   - "3.5"
 before_install:
-  - wget "http://noop.pw/etc/vienna224.tar.gz" -O vienna224.tar.gz
-  - echo "71a4c4704228fd01eb6e39415400a904d5240cef  vienna224.tar.gz" | shasum -c
-  - tar -zxvf vienna224.tar.gz
-  - cd vienna224
+  - wget 'http://www.tbi.univie.ac.at/RNA/download/sourcecode/2_2_x/ViennaRNA-2.2.10.tar.gz' -O vienna.tar.gz
+  - mkdir vienna
+  - tar -zxvf vienna.tar.gz -C vienna --strip-components=1
+  - cd vienna
   - ./configure --without-perl --without-python
   - make
   - sudo make install
@@ -20,7 +20,6 @@ script:
   - python setup.py develop
   - python -m unittest discover
 notifications:
-  email:
-    recipients: prashant@ducic.ac.in
-    on_success: change
-    on_failure: change
+  email: false
+  slack: noop-fa:zbwZeeSi5kgDshj6FO4BkNZU
+

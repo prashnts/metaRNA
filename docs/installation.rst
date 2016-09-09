@@ -22,7 +22,7 @@ and install by hand.
 
 .. code-block:: bash
 
-    git clone https://github.com/PrashntS/metaRNA.git
+    git clone https://github.com/prashnts/metaRNA.git
     cd metaRNA
     python setup.py install
 
@@ -30,7 +30,7 @@ You can run the tests using the test-runner::
 
     python setup.py test
 
-Browse the source code online at https://github.com/PrashntS/metaRNA
+Browse the source code online at https://github.com/prashnts/metaRNA
 
 Pre-requisite
 -------------
@@ -41,9 +41,10 @@ On Unix-like systems, it usually involves:
 
 .. code-block:: bash
 
-    wget "http://www.tbi.univie.ac.at/RNA/download/package=viennarna-src-tbi&flavor=sourcecode&dist=2_2_x&arch=src&version=2.2.4" -O viennaRNA.tar.gz
-    tar -zxvf viennaRNA.tar.gz
-    cd ViennaRNA-2.2.4
+    wget 'http://www.tbi.univie.ac.at/RNA/download/sourcecode/2_2_x/ViennaRNA-2.2.10.tar.gz' -O viennarna.tar.gz
+    mkdir viennarna
+    tar -zxvf viennarna.tar.gz -C viennarna --strip-components=1
+    cd viennarna
     ./configure
     make
     sudo make install
