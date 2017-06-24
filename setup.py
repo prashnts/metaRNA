@@ -32,8 +32,8 @@ def check_sanity():
   if not os.name == 'posix':
     print("metaRNA is currently not tested on non-posix systems.")
 
-  if sys.version_info[:2] not in [(2, 7), (3, 3), (3, 4), (3, 5)]:
-    print("metaRNA is only supported on Python 2.7, 3.3, 3.4, 3.5.")
+  if sys.version_info[:2] not in [(2, 7), (3, 3), (3, 4), (3, 5), (3, 6)]:
+    print("metaRNA is only supported on Python 2.7, 3.3, 3.4, 3.5, 3.6.")
     return False
 
   if not check_rna_lib_installed(**get_rna_lib_intallation_path()):
@@ -76,7 +76,7 @@ def extension_args():
 
 setup_args = {
   'name': 'metarna',
-  'version': '4.0.4',
+  'version': '4.0.5',
   'author': 'Prashant Sinha',
   'author_email': 'prashant@ducic.ac.in',
   'url': 'https://github.com/prashnts/metarna',
