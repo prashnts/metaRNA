@@ -25,7 +25,7 @@ HEREDOC
 source ./tools/pandalib.sh
 
 VIENNA_RELEASE='https://github.com/ViennaRNA/ViennaRNA/releases/download/v2.3.5/ViennaRNA-2.3.5.tar.gz'
-VIENNA_PREFIX=$(realpath .build)
+VIENNA_PREFIX=`pwd`/.build
 
 __sigint () {
   printf '\n'
