@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+_VERSION='0.1.1'
+_ME=$(basename "${0}")
+BANNER=$(cat <<HEREDOC
+
+metaRNA
+
+Version: ${_VERSION}
+
+Usage:
+  ${_ME} <command> [--command-options] [<arguments>]
+  ${_ME} -h | --help
+  ${_ME} --version
+
+Options:
+  -h --help  Display this help information.
+  --version  Display version information.
+
+Help:
+  ${_ME} help [<command>]
+
+HEREDOC
+)
+
+source ./tools/pandalib.sh
+
+VIENNA_RELEASE='https://github.com/ViennaRNA/ViennaRNA/releases/download/v2.3.5/ViennaRNA-2.3.5.tar.gz'
+VIENNA_PREFIX=$(realpath .build)
+
+__sigint () {
+  printf '\n'
+  _abort 'Cancelled'
+}
+trap __sigint SIGINT
+
+#================================================
+desc 'test:pytest' <<EOF
+Usage:
+  ${_ME} test:pytest
+
+Description:
+  Run Python unit tests.
+EOF
+test:pytest () {
+  python setup.py test && rc=$? || rc=$?
+  return $rc
+}
+
+#================================================
+desc 'test:setup' <<EOF
+Usage:
+  ${_ME} test:setup
+
+Description:
+  Test Setup script validity.
+EOF
+test:setup () {
+  python setup.py check && rc=$? || rc=$?
+  return $rc
+}
+
+#================================================
+desc 'test:all' <<HEREDOC
+Usage:
+  ${_ME} test:all
+
+Description:
+  Run all tests.
+HEREDOC
+test:all () {
+  local steps=('test:pytest' 'test:setup')
+  local _lenstep=${#steps[@]}
+  local _failure=0
+  for (( i = 0; i < $_lenstep; i++ )); do
+    _info "[$(($i + 1)) / $_lenstep] Running ${steps[$i]}"
+    ${steps[$i]} || _failure=$(($_failure + 1))
+  done
+  if [ $_failure -eq 0 ]; then
+    _success 'All tests passing'
+  else
+    _abort "$_failure of $_lenstep tests failed"
+  fi
+}
+
+#================================================
+desc 'dev:install_vienna' <<HEREDOC
+Usage:
+  ${_ME} dev:install_vienna
+
+Description:
+  Install RNA Vienna Package.
+HEREDOC
+dev:install_vienna () {
+  mkdir -p .build
+  cd .build
+  wget $VIENNA_RELEASE -O vienna.tar.gz
+  mkdir vienna
+  tar -zxvf vienna.tar.gz -C vienna --strip-components=1
+  cd vienna
+  ./configure --without-perl \
+              --without-python \
+              --without-python3 \
+              --prefix=${VIENNA_PREFIX} \
+              --without-doc-pdf \
+              --without-doc-html \
+              --without-doc \
+              --without-svm \
+              --without-forester \
+              --without-gsl \
+              --without-json
+  make
+  make install
+  cd ../..
+}
+
+#================================================
+_main
