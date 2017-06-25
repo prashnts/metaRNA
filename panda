@@ -95,7 +95,7 @@ dev:install_vienna () {
   cd .build
   wget $VIENNA_RELEASE -O vienna.tar.gz
   mkdir vienna
-  tar -zxvf vienna.tar.gz -C vienna --strip-components=1
+  tar -zxf vienna.tar.gz -C vienna --strip-components=1
   cd vienna
   ./configure --without-perl \
               --without-python \
