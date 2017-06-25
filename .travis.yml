@@ -4,6 +4,8 @@ os:
 # - osx
 python:
   - "2.7"
+  - "3.3"
+  - "3.4"
   - "3.5"
   - "3.6"
 before_install:
@@ -11,7 +13,7 @@ before_install:
   - mkdir vienna
   - tar -zxvf vienna.tar.gz -C vienna --strip-components=1
   - cd vienna
-  - ./configure --without-perl --without-python
+  - ./configure --without-perl --without-python --without-python3
   - make
   - sudo make install
 script:
