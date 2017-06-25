@@ -4,9 +4,8 @@ os:
 # - osx
 python:
   - "2.7"
-  - "3.3"
-  - "3.4"
   - "3.5"
+  - "3.6"
 before_install:
   - wget 'http://www.tbi.univie.ac.at/RNA/download/sourcecode/2_2_x/ViennaRNA-2.2.10.tar.gz' -O vienna.tar.gz
   - mkdir vienna
@@ -22,4 +21,3 @@ script:
 notifications:
   email: false
   slack: noop-fa:zbwZeeSi5kgDshj6FO4BkNZU
-

@@ -1,8 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#.--. .-. ... .... -. - ... .-.-.- .. -.
-
 import unittest
+
 from metarna.target_scan import scan, free_energy
 
 class TestTargetScan(unittest.TestCase):

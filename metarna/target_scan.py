@@ -1,9 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#.--. .-. ... .... -. - ... .-.-.- .. -.
-
 import json
+
 from metarna.pymiranda import find_targets
+
 
 def scan(target_sequence, mirna_sequence, **kwa):
   """
@@ -31,6 +29,7 @@ def scan(target_sequence, mirna_sequence, **kwa):
   mirna_sequence_rev = mirna_sequence[::-1]
   enc_result = find_targets(target_sequence, mirna_sequence_rev, **kwa)
   return json.loads(enc_result)
+
 
 def free_energy(target_sequence, mirna_sequence, **kwa):
   """
