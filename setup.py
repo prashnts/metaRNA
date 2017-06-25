@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#.--. .-. ... .... -. - ... .-.-.- .. -.
-
 import sys
 import os
 import platform
@@ -10,17 +8,43 @@ from setuptools import setup, Extension
 
 def check_rna_lib_installed(**kwa):
   "Check Vienna RNA Packages"
-  return all([os.path.exists(*v) for k, v in kwa.items()])
+  def check_libs(paths):
+    for path in paths:
+      exts = ('.so', '.la', '.a')
+      libpaths = [path + '/libRNA' + ext for ext in exts]
+      return any(libpaths)
+    return False
+
+  def check_includes(paths):
+    for path in paths:
+      foldpath = path + '/ViennaRNA/fold.h'
+      if os.path.exists(foldpath):
+        return True
+    return False
+
+  return check_includes(kwa['include_dirs']) and check_libs(kwa['library_dirs'])
 
 def get_rna_lib_intallation_path():
   "Attempts to get the RNAlib Path"
+  includes = [
+    '/usr/include',
+    '/usr/local/include',
+    os.path.abspath('.build/include'),
+  ]
+  libs = [
+    '/usr/lib',
+    '/usr/local/lib',
+    os.path.abspath('.build/lib'),
+  ]
+
+  if 'VIENNA_RNA_PATH' in os.environ:
+    px = os.environ['VIENNA_RNA_PATH']
+    includes.append(px + '/include')
+    libs.append(px + '/lib')
+
   return {
-    'include_dirs': [
-      os.environ.get('VIENNARNAINCLUDE', '/usr/local/include/ViennaRNA'),
-    ],
-    'library_dirs': [
-      os.environ.get('VIENNARNALIB', '/usr/local/lib')
-    ]
+    'include_dirs': includes[::-1],
+    'library_dirs': libs[::-1]
   }
 
 def check_sanity():
@@ -42,8 +66,7 @@ def check_sanity():
       "for installation instructions.\n"
       "If you have Vienna Package, then perhaps the installer is "
       "unable to find the location. The location may be set by "
-      "setting the `VIENNARNAINCLUDE` and `VIENNARNALIB` environment "
-      "variables."
+      "setting the `VIENNA_RNA_PATH` environment variable."
     )
     return False
   return True

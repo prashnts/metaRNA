@@ -7,19 +7,11 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
+  - "3.6"
 before_install:
-  - wget 'http://www.tbi.univie.ac.at/RNA/download/sourcecode/2_2_x/ViennaRNA-2.2.10.tar.gz' -O vienna.tar.gz
-  - mkdir vienna
-  - tar -zxvf vienna.tar.gz -C vienna --strip-components=1
-  - cd vienna
-  - ./configure --without-perl --without-python
-  - make
-  - sudo make install
+  - ./panda dev:install_vienna
 script:
-  - cd $TRAVIS_BUILD_DIR
-  - python setup.py develop
-  - python -m unittest discover
+  - ./panda test:all
 notifications:
   email: false
   slack: noop-fa:zbwZeeSi5kgDshj6FO4BkNZU
-
